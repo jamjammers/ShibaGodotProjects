@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://b5og601fwewkl"]
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_5ajho"]
-a = Vector2(0, 1)
-b = Vector2(40, 1)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5ajho"]
 size = Vector2(40, 40)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_acfso"]
+a = Vector2(1, 0)
+b = Vector2(-39, 0)
 
 [node name="Platform" type="StaticBody2D"]
 
@@ -13,10 +13,10 @@ size = Vector2(40, 40)
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Top" type="CollisionShape2D" parent="."]
-shape = SubResource("SegmentShape2D_5ajho")
-one_way_collision_margin = 0.0
-
 [node name="Body" type="CollisionShape2D" parent="."]
 position = Vector2(20, 20)
 shape = SubResource("RectangleShape2D_5ajho")
+
+[node name="Top" type="CollisionShape2D" parent="." groups=["groundTop"]]
+position = Vector2(39, 0)
+shape = SubResource("SegmentShape2D_acfso")

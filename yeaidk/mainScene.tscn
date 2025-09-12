@@ -1,15 +1,27 @@
-[gd_scene load_steps=3 format=3 uid="uid://bdmj1sekwkwdr"]
+[gd_scene load_steps=4 format=3 uid="uid://bdmj1sekwkwdr"]
 
 [ext_resource type="PackedScene" uid="uid://b5og601fwewkl" path="res://assetScenes/platform.tscn" id="1_iwpey"]
 [ext_resource type="PackedScene" uid="uid://cchnc2wed5tb6" path="res://assetScenes/Player.tscn" id="2_g4qto"]
+[ext_resource type="PackedScene" uid="uid://ds7n8vkl416e3" path="res://assetScenes/enemy.tscn" id="3_hr5et"]
 
 [node name="Scene" type="Node"]
 
 [node name="Platform" parent="." instance=ExtResource("1_iwpey")]
-position = Vector2(-17, 13)
-scale = Vector2(10.6356, 2.33216)
+position = Vector2(168, 68)
+scale = Vector2(8.69213, 15.2455)
 
 [node name="Player" parent="." instance=ExtResource("2_g4qto")]
-position = Vector2(7, -32)
+position = Vector2(-395, 69)
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Platform2" parent="." instance=ExtResource("1_iwpey")]
+position = Vector2(-1300, 267)
+scale = Vector2(113.116, 5.43897)
+
+[node name="Platform3" parent="." instance=ExtResource("1_iwpey")]
+position = Vector2(-3758, -8758)
+scale = Vector2(81.1517, 232.426)
+
+[node name="basicEnemy" parent="." instance=ExtResource("3_hr5et")]
+position = Vector2(234, -3)

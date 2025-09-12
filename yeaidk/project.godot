@@ -23,6 +23,10 @@ project/assembly_name="yeaIdk"
 
 enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
 
+[global_group]
+
+groundTop="groundTop"
+
 [input]
 
 moveRight={
