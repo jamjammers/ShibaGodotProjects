@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://b6ljirlsixoqs"]
+
+[ext_resource type="Script" uid="uid://b7manj21b74no" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://bysexnw0l5qav" path="res://mob.tscn" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://b4dunvinspj01" path="res://Player.tscn" id="3_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://b8w7p0wynulq5" path="res://HUD.tscn" id="4_1bvp3"]
+
+[sub_resource type="Curve2D" id="Curve2D_0xm2m"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 710, -33, 0, 0, 0, 0, 1198, -47, 0, 0, 0, 0, 1182, 686, 0, 0, 0, 0, -29, 686, 0, 0, 0, 0, -19, -33, 0, 0, 0, 0, 707, -41)
+}
+point_count = 6
+
+[node name="Main" type="Node"]
+script = ExtResource("1_ig7tw")
+mob_scene = ExtResource("2_h2yge")
+
+[node name="MobTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(240, 450)
+
+[node name="MobPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_0xm2m")
+
+[node name="spawnLocation" type="PathFollow2D" parent="MobPath"]
+position = Vector2(710, -33)
+rotation = -0.0286807
+
+[node name="Player" parent="." instance=ExtResource("3_1bvp3")]
+
+[node name="HUD" parent="." instance=ExtResource("4_1bvp3")]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1158.0
+offset_bottom = 655.0
+color = Color(0.184, 0.69, 0, 1)
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="hit" from="Player" to="." method="game_over"]
+[connection signal="startGame" from="HUD" to="." method="new_game"]
