@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0a3eiv08sirm"]
+
+[ext_resource type="Texture2D" uid="uid://v8ci2sqgp4jc" path="res://assets/images/gear_hp.png" id="1_k5de2"]
+[ext_resource type="Script" uid="uid://dsj1numna7nnj" path="res://assets/scripts/hud.gd" id="1_oai8d"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_oai8d")
+
+[node name="hp" type="Node" parent="."]
+
+[node name="GearHP1" type="TextureRect" parent="hp"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 100.0
+offset_bottom = 100.0
+texture = ExtResource("1_k5de2")
+expand_mode = 2
+
+[node name="GearHP2" type="TextureRect" parent="hp"]
+offset_left = 120.0
+offset_top = 20.0
+offset_right = 200.0
+offset_bottom = 100.0
+texture = ExtResource("1_k5de2")
+expand_mode = 2
+
+[node name="GearHP3" type="TextureRect" parent="hp"]
+offset_left = 220.0
+offset_top = 20.0
+offset_right = 300.0
+offset_bottom = 100.0
+texture = ExtResource("1_k5de2")
+expand_mode = 2
+
+[node name="GearHP5" type="TextureRect" parent="hp"]
+offset_left = 320.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 100.0
+texture = ExtResource("1_k5de2")
+expand_mode = 2

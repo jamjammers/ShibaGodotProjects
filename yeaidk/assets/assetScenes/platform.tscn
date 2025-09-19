@@ -3,20 +3,20 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5ajho"]
 size = Vector2(40, 40)
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_acfso"]
-a = Vector2(1, 0)
-b = Vector2(-39, 0)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_acfso"]
+size = Vector2(38, 0)
 
 [node name="Platform" type="StaticBody2D"]
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
 
 [node name="Body" type="CollisionShape2D" parent="."]
-position = Vector2(20, 20)
 shape = SubResource("RectangleShape2D_5ajho")
 
 [node name="Top" type="CollisionShape2D" parent="." groups=["groundTop"]]
-position = Vector2(39, 0)
-shape = SubResource("SegmentShape2D_acfso")
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_acfso")

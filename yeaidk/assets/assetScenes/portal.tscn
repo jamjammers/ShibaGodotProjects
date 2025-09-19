@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://cbr6hcqvt3jkm"]
+
+[ext_resource type="Shader" uid="uid://b0yrya7mspdnu" path="res://assets/textures/portalShaderIDKATP.gdshader" id="1_hxglc"]
+[ext_resource type="Script" uid="uid://bq4srhtii8ust" path="res://assets/scripts/portal.gd" id="1_urc2y"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_urc2y"]
+shader = ExtResource("1_hxglc")
+shader_parameter/start_color = Color(1, 0, 0.9333334, 1)
+shader_parameter/end_color = Color(0, 0, 0, 0)
+shader_parameter/vertical = false
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v4f56"]
+size = Vector2(10, 70)
+
+[node name="portal" type="Node2D"]
+script = ExtResource("1_urc2y")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_urc2y")
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -35.0
+offset_right = 40.0
+offset_bottom = 35.0
+grow_vertical = 2
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+visible = false
+position = Vector2(5, 0)
+shape = SubResource("RectangleShape2D_v4f56")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
