@@ -1,12 +1,12 @@
 [gd_scene load_steps=5 format=3 uid="uid://cbr6hcqvt3jkm"]
 
-[ext_resource type="Shader" uid="uid://b0yrya7mspdnu" path="res://assets/textures/portalShaderIDKATP.gdshader" id="1_hxglc"]
 [ext_resource type="Script" uid="uid://bq4srhtii8ust" path="res://assets/scripts/portal.gd" id="1_urc2y"]
+[ext_resource type="Shader" uid="uid://cbtamm1jc71ue" path="res://assets/textures/portalGradient.gdshader" id="2_urc2y"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_urc2y"]
-shader = ExtResource("1_hxglc")
-shader_parameter/start_color = Color(1, 0, 0.9333334, 1)
-shader_parameter/end_color = Color(0, 0, 0, 0)
+shader = ExtResource("2_urc2y")
+shader_parameter/color_start = Color(0.6856668, 0.18, 1, 1)
+shader_parameter/color_end = Color(0, 0, 0, 0)
 shader_parameter/vertical = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v4f56"]

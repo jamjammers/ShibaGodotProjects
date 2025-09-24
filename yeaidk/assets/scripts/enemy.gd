@@ -3,8 +3,6 @@ var active := false
 var target: Node2D = null;
 var timer : float = 0.0;
 
-signal hit
-
 func _physics_process(delta):
 	timer -= delta
 	if(active and timer <0):
@@ -17,7 +15,6 @@ func _draw():
 		0, TAU, 64, 
 		Color.GREEN if active else Color.RED,
 		2.0)
-
 
 func attack():
 	if(target.position.x > position.x):
@@ -42,7 +39,6 @@ func _on_detection_body_exited(body: Node2D) -> void:
 		target = null
 		
 		queue_redraw()
-
 
 func _on_contact_body_entered(body: Node2D) -> void:
 	if( body.name == "Player"):

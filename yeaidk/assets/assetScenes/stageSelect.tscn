@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhkpe020nssxk"]
+
+[ext_resource type="Script" uid="uid://cwix3d6w36ktx" path="res://assets/scripts/stageSelect.gd" id="1_2o2lk"]
+
+[node name="stageSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2o2lk")

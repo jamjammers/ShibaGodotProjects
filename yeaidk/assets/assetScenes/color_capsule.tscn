@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4pi8242nxsjo"]
+
+[ext_resource type="Script" uid="uid://cepspqyixd7gr" path="res://assets/scripts/color_capsule.gd" id="1_3523t"]
+
+[node name="ColorCapsule" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_3523t")

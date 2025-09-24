@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://dep25nrtxqtas"]
+
+[ext_resource type="PackedScene" uid="uid://cbr6hcqvt3jkm" path="res://assets/assetScenes/portal.tscn" id="1_kgca3"]
+[ext_resource type="PackedScene" uid="uid://b5og601fwewkl" path="res://assets/assetScenes/platform.tscn" id="2_pyq0k"]
+
+[node name="startStage" type="Node2D"]
+
+[node name="ReferenceRect" type="ReferenceRect" parent="."]
+offset_right = 1000.0
+offset_bottom = 1000.0
+border_width = 2.0
+
+[node name="leftPortal" parent="." instance=ExtResource("1_kgca3")]
+position = Vector2(0, 925)
+
+[node name="Platform" parent="." instance=ExtResource("2_pyq0k")]
+position = Vector2(500, 980)
+scale = Vector2(25, 1)
+
+[node name="rightPortal" parent="." instance=ExtResource("1_kgca3")]
+position = Vector2(1000, 925)
+rotation = 3.1415927
+
+[node name="Platform2" parent="." instance=ExtResource("2_pyq0k")]
+position = Vector2(500, 940)
+scale = Vector2(5, 1)
+
+[node name="Platform3" parent="." instance=ExtResource("2_pyq0k")]
+position = Vector2(160, 700)
+scale = Vector2(8, 1)
+
+[node name="Platform4" parent="." instance=ExtResource("2_pyq0k")]
+position = Vector2(840, 700)
+scale = Vector2(8, 1)
+
+[node name="wall" parent="." instance=ExtResource("2_pyq0k")]
+position = Vector2(20, 450.00003)
+scale = Vector2(1, 22.5)
