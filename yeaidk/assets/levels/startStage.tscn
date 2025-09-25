@@ -10,16 +10,9 @@ offset_right = 1000.0
 offset_bottom = 1000.0
 border_width = 2.0
 
-[node name="leftPortal" parent="." instance=ExtResource("1_kgca3")]
-position = Vector2(0, 925)
-
 [node name="Platform" parent="." instance=ExtResource("2_pyq0k")]
 position = Vector2(500, 980)
 scale = Vector2(25, 1)
-
-[node name="rightPortal" parent="." instance=ExtResource("1_kgca3")]
-position = Vector2(1000, 925)
-rotation = 3.1415927
 
 [node name="Platform2" parent="." instance=ExtResource("2_pyq0k")]
 position = Vector2(500, 940)
@@ -34,5 +27,16 @@ position = Vector2(840, 700)
 scale = Vector2(8, 1)
 
 [node name="wall" parent="." instance=ExtResource("2_pyq0k")]
-position = Vector2(20, 450.00003)
-scale = Vector2(1, 22.5)
+position = Vector2(20, 420)
+scale = Vector2(1, 21)
+
+[node name="wall2" parent="." instance=ExtResource("2_pyq0k")]
+position = Vector2(980, 420)
+scale = Vector2(1, 21)
+
+[node name="leftPortal" parent="." instance=ExtResource("1_kgca3")]
+position = Vector2(0, 900)
+
+[node name="rightPortal" parent="." instance=ExtResource("1_kgca3")]
+position = Vector2(1000, 900)
+rotation = -3.1415925

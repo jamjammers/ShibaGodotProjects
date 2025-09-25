@@ -1,17 +1,18 @@
-extends Node2D
-
-signal triggerArea(new, direction)
-
-@export var triggered := false
-
-@export var direction : portalDirection = portalDirection.LEFT;
-
-func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.name == "Player":
-		triggerArea.emit(triggered, direction)
-		triggered = true;
-	pass # Replace with function body.
+class_name Portal extends Node2D
 
 enum portalDirection{
 	LEFT, RIGHT, UP, DOWN
 }
+
+@export var triggered := false
+
+var direction : portalDirection = portalDirection.LEFT;
+
+
+
+func _on_body_entered(body: Node2D) -> void:
+	print(body.name)
+	if body.name == "Player":
+		body.enterPortal(direction)
+		print("google")
+		triggered = true; #why?

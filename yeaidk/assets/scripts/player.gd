@@ -1,6 +1,7 @@
 extends RigidBody2D
 
 signal hurt(hp:int)
+signal portal(direction: Portal.portalDirection)
 
 @export var speed = 600.0
 @export var acceleration = 6000.0
@@ -127,10 +128,15 @@ func _on_body_shape_entered(body_rid: RID, body: Node, body_shape_index: int, lo
 	elif(shape_owner.is_in_group("wallSide")):
 		wallTouch = true
 
+#trigger when hit by enemy
 func hit():
 	hp-=1
 	hurt.emit(hp)
 	print(hp)
+
+#trigger when hit portal
+func enterPortal(direction: Portal.portalDirection):
+	portal.emit(direction)
 
 @warning_ignore("unused_parameter")
 func _on_body_shape_exited(body_rid: RID, body: Node, body_shape_index: int, local_shape_index: int) -> void:

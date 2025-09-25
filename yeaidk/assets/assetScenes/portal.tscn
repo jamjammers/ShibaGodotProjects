@@ -10,26 +10,25 @@ shader_parameter/color_end = Color(0, 0, 0, 0)
 shader_parameter/vertical = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v4f56"]
-size = Vector2(10, 70)
+size = Vector2(17, 120)
 
-[node name="portal" type="Node2D"]
+[node name="portal" type="Area2D" groups=["portal"]]
+collision_mask = 2
 script = ExtResource("1_urc2y")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." groups=["portal"]]
 material = SubResource("ShaderMaterial_urc2y")
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -35.0
+offset_top = -60.0
 offset_right = 40.0
-offset_bottom = 35.0
+offset_bottom = 60.0
 grow_vertical = 2
+metadata/_edit_use_anchors_ = true
 
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-visible = false
-position = Vector2(5, 0)
+[node name="Collider" type="CollisionShape2D" parent="." groups=["portal"]]
+position = Vector2(8.5, 0)
 shape = SubResource("RectangleShape2D_v4f56")
 
-[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

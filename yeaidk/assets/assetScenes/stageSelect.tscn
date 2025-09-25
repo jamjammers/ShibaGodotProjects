@@ -10,3 +10,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2o2lk")
+
+[node name="bg" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = -644.0
+offset_top = -407.0
+offset_right = 644.0
+offset_bottom = 408.0

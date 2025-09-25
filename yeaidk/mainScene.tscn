@@ -1,28 +1,54 @@
-[gd_scene load_steps=6 format=3 uid="uid://bdmj1sekwkwdr"]
+[gd_scene load_steps=8 format=3 uid="uid://bdmj1sekwkwdr"]
 
 [ext_resource type="PackedScene" uid="uid://dep25nrtxqtas" path="res://assets/levels/startStage.tscn" id="1_6mfv6"]
 [ext_resource type="PackedScene" uid="uid://cchnc2wed5tb6" path="res://assets/assetScenes/Player.tscn" id="2_g4qto"]
 [ext_resource type="PackedScene" uid="uid://ds7n8vkl416e3" path="res://assets/assetScenes/enemy.tscn" id="3_hr5et"]
 [ext_resource type="Script" uid="uid://c5gfppe15rdlu" path="res://assets/scripts/camSC.gd" id="4_6mfv6"]
 [ext_resource type="PackedScene" uid="uid://b0a3eiv08sirm" path="res://assets/assetScenes/HUD.tscn" id="4_61od6"]
+[ext_resource type="PackedScene" uid="uid://bhkpe020nssxk" path="res://assets/assetScenes/stageSelect.tscn" id="6_2qqqv"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_2qqqv"]
+viewport_path = NodePath("SubViewport")
 
 [node name="Scene" type="Node"]
 
-[node name="startStage" parent="." instance=ExtResource("1_6mfv6")]
+[node name="HUD" parent="." instance=ExtResource("4_61od6")]
 
-[node name="Player" parent="." instance=ExtResource("2_g4qto")]
-position = Vector2(103, 889)
+[node name="stageSelect" parent="." instance=ExtResource("6_2qqqv")]
+offset_left = 0.6480641
+offset_top = 0.7729427
+offset_right = 0.6480713
+offset_bottom = 0.7729492
 
-[node name="basicEnemy" parent="." instance=ExtResource("3_hr5et")]
-position = Vector2(884, 918)
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(2000, 1000)
 
-[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
-position = Vector2(-0.6470032, -0.78170013)
-scale = Vector2(0.998363, 1.01133)
+[node name="Camera2D" type="Camera2D" parent="SubViewport" node_paths=PackedStringArray("target")]
 zoom = Vector2(2, 2)
 script = ExtResource("4_6mfv6")
 target = NodePath("../Player")
 
-[node name="HUD" parent="Camera2D" instance=ExtResource("4_61od6")]
+[node name="startStage" parent="SubViewport" instance=ExtResource("1_6mfv6")]
 
-[connection signal="hurt" from="Player" to="Camera2D/HUD" method="_on_player_hurt"]
+[node name="Player" parent="SubViewport" instance=ExtResource("2_g4qto")]
+position = Vector2(103, 889)
+
+[node name="basicEnemy" parent="SubViewport" instance=ExtResource("3_hr5et")]
+position = Vector2(884, 918)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1000.0
+offset_top = -500.0
+offset_right = 1000.0
+offset_bottom = 500.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("ViewportTexture_2qqqv")
+
+[connection signal="hurt" from="SubViewport/Player" to="HUD" method="_on_player_hurt"]
+[connection signal="portal" from="SubViewport/Player" to="stageSelect" method="_on_player_portal"]

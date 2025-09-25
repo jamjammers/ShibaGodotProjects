@@ -6,9 +6,8 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fksrs"]
 friction = 0.0
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kcuj0"]
-radius = 20.0
-height = 80.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rsc3f"]
+size = Vector2(40, 80)
 
 [node name="Player" type="RigidBody2D"]
 collision_layer = 2
@@ -20,7 +19,7 @@ max_contacts_reported = 10
 script = ExtResource("1_fksrs")
 
 [node name="PhysicsCol" type="CollisionShape2D" parent="."]
-shape = SubResource("CapsuleShape2D_kcuj0")
+shape = SubResource("RectangleShape2D_rsc3f")
 
 [node name="dashTimer" type="Timer" parent="."]
 wait_time = 0.5
@@ -29,12 +28,13 @@ one_shot = true
 [node name="triggerCol" type="Area2D" parent="."]
 
 [node name="Collider" type="CollisionShape2D" parent="triggerCol"]
-shape = SubResource("CapsuleShape2D_kcuj0")
+shape = SubResource("RectangleShape2D_rsc3f")
 
 [node name="ColorCapsule" parent="." instance=ExtResource("2_rsc3f")]
 color = Color(0, 0.7666669, 1, 1)
 radius = 20.0
 height = 80.0
 
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
 [connection signal="body_shape_exited" from="." to="." method="_on_body_shape_exited"]

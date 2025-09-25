@@ -11,12 +11,12 @@ offset_bottom = 600.0
 border_width = 2.0
 
 [node name="leftPortal" parent="." instance=ExtResource("1_oskjv")]
-position = Vector2(0, 525)
+position = Vector2(0, 500)
 
 [node name="Platform" parent="." instance=ExtResource("2_ygxl0")]
 position = Vector2(300, 580)
 scale = Vector2(15, 1)
 
 [node name="rightPortal" parent="." instance=ExtResource("1_oskjv")]
-position = Vector2(600, 525)
+position = Vector2(600, 500)
 rotation = 3.1415927
