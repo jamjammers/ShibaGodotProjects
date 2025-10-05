@@ -6,17 +6,18 @@
 [node name="Node2D" type="Node2D"]
 
 [node name="ReferenceRect" type="ReferenceRect" parent="."]
-offset_right = 600.0
-offset_bottom = 600.0
+offset_right = 1000.0
+offset_bottom = 1000.0
 border_width = 2.0
 
 [node name="leftPortal" parent="." instance=ExtResource("1_oskjv")]
-position = Vector2(0, 500)
+position = Vector2(0, 900)
 
 [node name="Platform" parent="." instance=ExtResource("2_ygxl0")]
-position = Vector2(300, 580)
-scale = Vector2(15, 1)
+position = Vector2(499.99997, 980)
+scale = Vector2(25, 1)
 
 [node name="rightPortal" parent="." instance=ExtResource("1_oskjv")]
-position = Vector2(600, 500)
+position = Vector2(1000, 900)
 rotation = 3.1415927
+direction = 2

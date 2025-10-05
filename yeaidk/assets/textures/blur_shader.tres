@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dk8bubicedxpm"]
+
+[ext_resource type="Shader" uid="uid://b2iy15t61lnfm" path="res://assets/textures/blur_shader.gdshader" id="1_c2poe"]
+
+[resource]
+shader = ExtResource("1_c2poe")
+shader_parameter/blur_size = 10.0
+shader_parameter/go = false

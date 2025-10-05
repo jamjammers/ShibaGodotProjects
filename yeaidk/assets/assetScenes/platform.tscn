@@ -10,6 +10,7 @@ size = Vector2(38, 0)
 size = Vector2(38, 0)
 
 [node name="Platform" type="StaticBody2D"]
+collision_mask = 0
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -20.0

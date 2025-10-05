@@ -2,6 +2,7 @@ extends Control
 @export var color: Color;
 @export var radius:float;
 @export var height:float;
+
 func _draw():
 	draw_circle(Vector2(0,height/2-radius), 
 		radius, 

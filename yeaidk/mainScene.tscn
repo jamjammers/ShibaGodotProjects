@@ -1,42 +1,52 @@
-[gd_scene load_steps=8 format=3 uid="uid://bdmj1sekwkwdr"]
+[gd_scene load_steps=10 format=3 uid="uid://bdmj1sekwkwdr"]
 
+[ext_resource type="Script" uid="uid://bag03enyan56a" path="res://assets/scripts/main_scene.gd" id="1_0pyiw"]
 [ext_resource type="PackedScene" uid="uid://dep25nrtxqtas" path="res://assets/levels/startStage.tscn" id="1_6mfv6"]
 [ext_resource type="PackedScene" uid="uid://cchnc2wed5tb6" path="res://assets/assetScenes/Player.tscn" id="2_g4qto"]
-[ext_resource type="PackedScene" uid="uid://ds7n8vkl416e3" path="res://assets/assetScenes/enemy.tscn" id="3_hr5et"]
 [ext_resource type="Script" uid="uid://c5gfppe15rdlu" path="res://assets/scripts/camSC.gd" id="4_6mfv6"]
 [ext_resource type="PackedScene" uid="uid://b0a3eiv08sirm" path="res://assets/assetScenes/HUD.tscn" id="4_61od6"]
+[ext_resource type="Material" uid="uid://dk8bubicedxpm" path="res://assets/textures/blur_shader.tres" id="5_we1jl"]
 [ext_resource type="PackedScene" uid="uid://bhkpe020nssxk" path="res://assets/assetScenes/stageSelect.tscn" id="6_2qqqv"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_2qqqv"]
-viewport_path = NodePath("SubViewport")
+viewport_path = NodePath("frameVP")
 
-[node name="Scene" type="Node"]
+[sub_resource type="GDScript" id="GDScript_bnlnp"]
+script/source = "extends TextureRect
 
-[node name="HUD" parent="." instance=ExtResource("4_61od6")]
+var go: bool = false
+func _ready():
+	var shader_material = material as ShaderMaterial
+	go = (shader_material).get_shader_parameter(\"go\")
+	
+		
+func blur():
+	var shader_material = material as ShaderMaterial
 
-[node name="stageSelect" parent="." instance=ExtResource("6_2qqqv")]
-offset_left = 0.6480641
-offset_top = 0.7729427
-offset_right = 0.6480713
-offset_bottom = 0.7729492
+	go = not go
+	(shader_material).set_shader_parameter(\"go\", go)
+	
+	pass
+"
 
-[node name="SubViewport" type="SubViewport" parent="."]
+[node name="mainScene" type="Node"]
+script = ExtResource("1_0pyiw")
+
+[node name="frameVP" type="SubViewport" parent="."]
 size = Vector2i(2000, 1000)
 
-[node name="Camera2D" type="Camera2D" parent="SubViewport" node_paths=PackedStringArray("target")]
+[node name="Camera2D" type="Camera2D" parent="frameVP" node_paths=PackedStringArray("target")]
 zoom = Vector2(2, 2)
 script = ExtResource("4_6mfv6")
 target = NodePath("../Player")
 
-[node name="startStage" parent="SubViewport" instance=ExtResource("1_6mfv6")]
-
-[node name="Player" parent="SubViewport" instance=ExtResource("2_g4qto")]
+[node name="Player" parent="frameVP" instance=ExtResource("2_g4qto")]
 position = Vector2(103, 889)
 
-[node name="basicEnemy" parent="SubViewport" instance=ExtResource("3_hr5et")]
-position = Vector2(884, 918)
+[node name="startStage" parent="frameVP" instance=ExtResource("1_6mfv6")]
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="frame" type="TextureRect" parent="."]
+material = ExtResource("5_we1jl")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -49,6 +59,11 @@ offset_bottom = 500.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_2qqqv")
+script = SubResource("GDScript_bnlnp")
 
-[connection signal="hurt" from="SubViewport/Player" to="HUD" method="_on_player_hurt"]
-[connection signal="portal" from="SubViewport/Player" to="stageSelect" method="_on_player_portal"]
+[node name="HUD" parent="." instance=ExtResource("4_61od6")]
+
+[node name="stageSelect" parent="." instance=ExtResource("6_2qqqv")]
+
+[connection signal="hurt" from="frameVP/Player" to="HUD" method="_on_player_hurt"]
+[connection signal="portal" from="frameVP/Player" to="." method="_on_player_portal"]

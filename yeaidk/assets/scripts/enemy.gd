@@ -1,21 +1,22 @@
 extends RigidBody2D
 var active := false
 var target: Node2D = null;
-var timer : float = 0.0;
+var timer: float = 0.0;
 
+var stored_velocity: Vector2 = Vector2.ZERO
 func _physics_process(delta):
 	timer -= delta
 	queue_redraw()
 	attackProcess()
 
 func _draw():
-	draw_arc(Vector2.ZERO, 
-		$detectionArea/triggerCircle.shape.radius, 
-		0, TAU, 64, 
+	draw_arc(Vector2.ZERO,
+		$detectionArea/triggerCircle.shape.radius,
+		0, TAU, 64,
 		Color.GREEN if target != null else Color.RED,
 		2.0)
-	if(active):
-		draw_line(Vector2(0,0), target.global_position-global_position, Color.GREEN if active else Color.RED,2 )
+	if (active):
+		draw_line(Vector2(0, 0), target.global_position - global_position, Color.GREEN if active else Color.RED, 2)
 
 func attackProcess():
 	active = false
@@ -28,19 +29,35 @@ func attackProcess():
 	var result = space_state.intersect_ray(query)
 	if !result:
 		return
-	if(result.collider.name!="Player"):
+	if (result.collider.name != "Player"):
 		return
 
-	if(timer > 0):
+	if (timer > 0):
 		return
 	active = true
 	attack()
-	timer = 2
+	timer = 1
+
 func attack():
-	if(target.position.x > position.x):
-		apply_central_impulse(Vector2(500,-300));
+	physics_material_override.friction = 0
+	if (target.position.x > position.x):
+		apply_central_impulse(Vector2(500, -300));
 	else:
-		apply_central_impulse(Vector2(-500,-300));
+		apply_central_impulse(Vector2(-500, -300));
+
+func enterFreeze(freezeState:bool) -> void:
+	
+	freeze = freezeState
+	sleeping = freezeState
+
+	if freezeState:
+		stored_velocity = linear_velocity
+		linear_velocity = Vector2.ZERO
+		gravity_scale = 0
+	else:
+		stored_velocity = Vector2.ZERO
+		linear_velocity = stored_velocity
+		gravity_scale = 1
 
 func _on_detection_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
@@ -57,8 +74,13 @@ func _on_detection_body_exited(body: Node2D) -> void:
 		
 		queue_redraw()
 
-func _on_contact_body_entered(body: Node2D) -> void:
-	if( body.name == "Player"):
-		body.hit()
 
+@warning_ignore("unused_parameter")
+func _on_contact_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+	var shape_owner: Node = body.shape_owner_get_owner(body.shape_find_owner(body_shape_index))
+
+	if (body.name == "Player"):
+		body.hit()
+	elif(shape_owner.is_in_group("groundTop")):
+		physics_material_override.friction = 0.9
 	pass # Replace with function body.

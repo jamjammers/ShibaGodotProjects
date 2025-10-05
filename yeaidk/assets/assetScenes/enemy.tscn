@@ -1,6 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://ds7n8vkl416e3"]
+[gd_scene load_steps=6 format=3 uid="uid://ds7n8vkl416e3"]
 
 [ext_resource type="Script" uid="uid://cctdjmtraamx5" path="res://assets/scripts/enemy.gd" id="1_vbccy"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_s0lh8"]
+friction = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7xaro"]
 size = Vector2(40, 40)
@@ -9,10 +12,13 @@ size = Vector2(40, 40)
 radius = 300.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vbccy"]
+size = Vector2(40, 40)
 
 [node name="basicEnemy" type="RigidBody2D"]
 physics_interpolation_mode = 1
 collision_layer = 4
+physics_material_override = SubResource("PhysicsMaterial_s0lh8")
+lock_rotation = true
 continuous_cd = 2
 script = ExtResource("1_vbccy")
 
@@ -35,7 +41,7 @@ shape = SubResource("CircleShape2D_vbccy")
 
 [node name="contact" type="Area2D" parent="."]
 collision_layer = 8
-collision_mask = 2
+collision_mask = 3
 
 [node name="ContactCol" type="CollisionShape2D" parent="contact" groups=["enemies"]]
 shape = SubResource("RectangleShape2D_vbccy")
@@ -43,3 +49,4 @@ shape = SubResource("RectangleShape2D_vbccy")
 [connection signal="body_entered" from="detectionArea" to="." method="_on_detection_body_entered"]
 [connection signal="body_exited" from="detectionArea" to="." method="_on_detection_body_exited"]
 [connection signal="body_entered" from="contact" to="." method="_on_contact_body_entered"]
+[connection signal="body_shape_entered" from="contact" to="." method="_on_contact_body_shape_entered"]
