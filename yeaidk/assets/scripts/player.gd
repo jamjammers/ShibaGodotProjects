@@ -160,8 +160,8 @@ func hit():
 	print("Incomplete: got hurt. "+str(hp)+" hp remains");
 
 #trigger when hit portal
-func enterPortal(portalEntered: Portal, new: bool, stage: StageReference) -> void:
-	portal.emit(portalEntered, new, stage)
+func enterPortal(portalEntered: Portal) -> void:
+	portal.emit(portalEntered)
 
 @warning_ignore("unused_parameter")
 func _on_body_shape_exited(body_rid: RID, body: Node, body_shape_index: int, local_shape_index: int) -> void:

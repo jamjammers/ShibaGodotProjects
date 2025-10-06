@@ -5,8 +5,8 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_s0lh8"]
 friction = 0.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7xaro"]
-size = Vector2(40, 40)
+[sub_resource type="CircleShape2D" id="CircleShape2D_s0lh8"]
+radius = 20.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vbccy"]
 radius = 300.0
@@ -30,7 +30,7 @@ offset_bottom = 20.0
 color = Color(1, 0, 0, 1)
 
 [node name="physicalCol" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_7xaro")
+shape = SubResource("CircleShape2D_s0lh8")
 
 [node name="detectionArea" type="Area2D" parent="."]
 collision_layer = 4

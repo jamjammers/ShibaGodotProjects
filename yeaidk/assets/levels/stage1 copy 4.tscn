@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqvvy0mhyqkdi"]
+[gd_scene load_steps=3 format=3 uid="uid://bhcawety67107"]
 
 [ext_resource type="PackedScene" uid="uid://cbr6hcqvt3jkm" path="res://assets/assetScenes/portal.tscn" id="1_oskjv"]
 [ext_resource type="PackedScene" uid="uid://b5og601fwewkl" path="res://assets/assetScenes/platform.tscn" id="2_ygxl0"]
 
-[node name="s1" type="Node2D" groups=["stage"]]
+[node name="s4" type="Node2D" groups=["stage"]]
 
 [node name="ReferenceRect" type="ReferenceRect" parent="."]
 offset_right = 1000.0

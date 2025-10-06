@@ -15,6 +15,10 @@ run/main_scene="uid://bdmj1sekwkwdr"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Global="*res://assets/scripts/globals.gd"
+
 [display]
 
 window/size/viewport_width=2000
@@ -86,3 +90,4 @@ moveDown={
 2d_physics/layer_2="player"
 2d_physics/layer_3="enemy_detection"
 2d_physics/layer_4="enemy_collision"
+2d_physics/layer_5="portal"

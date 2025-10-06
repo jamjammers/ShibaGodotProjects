@@ -2,18 +2,33 @@ extends Node
 
 
 var player: RigidBody2D = null
-var sceneCache :Dictionary[String, PackedScene] = {}
+var sceneCache: Dictionary[String, PackedScene] = {}
 
 var screenFreezeState := false
 
 var shaderBlurState := false
 
+var currentStage: StageReference = StageReference.new(null, "res://assets/levels/reservedStages/startStage.tscn")
+
 func _ready() -> void:
 	blur(false)
-	sceneCache["startStage"] = load("res://assets/levels/startStage.tscn")
+	sceneCache["startStage"] = load("res://assets/levels/reservedStages/startStage.tscn")
 	player = $frameVP/Player
 	pass # Replace with function body.
 
+func _on_player_portal(portalEntered: Portal) -> void:
+	var new = Global.getPortal(currentStage.name, portalEntered.direction) == null
+	if new:
+		$stageSelect.display(portalEntered)
+		blur(true)
+		freezeScene()
+	else:
+		var targetStage = Global.getPortal(currentStage.name, portalEntered.direction)
+		player.collision_layer = 16
+
+		changeStage(targetStage, portalEntered)
+		pass
+	
 func loadScene(stage: StageReference):
 	if !sceneCache.has(stage.name):
 		var scene = stage.loadStage()
@@ -22,18 +37,7 @@ func loadScene(stage: StageReference):
 		else:
 			print("Error: Failed to load scene %s"%stage.name)
 
-func _on_player_portal(portal:Portal, new: bool, stage:StageReference) -> void:
-	if new:
-		$stageSelect.display(portal)
-		blur(true)
-		freezeScene()
-	else:
-		print("stage name:"+stage.name)
-		changeStage(stage, portal)
-		pass
-
 func freezeScene(freezeState = true) -> void:
-
 	screenFreezeState = freezeState
 
 	$frameVP/Player.call_deferred("enterFreeze", freezeState)
@@ -49,8 +53,8 @@ func freezeScene(freezeState = true) -> void:
 				continue
 			node.call_deferred("enterFreeze", (freezeState))
 
-func blur(value = "") -> void:
-	if value is String and value == "":
+func blur(value = null) -> void:
+	if value == null:
 		var shader_material = $frame.material as ShaderMaterial
 
 		shaderBlurState = not shaderBlurState
@@ -61,25 +65,27 @@ func blur(value = "") -> void:
 		shaderBlurState = value
 		(shader_material).set_shader_parameter("go", shaderBlurState)
 
-func buttonSelect(stage:StageReference, portal: Portal) -> void:
+func buttonSelect(stage: StageReference, portalEntered: Portal) -> void:
 	freezeScene(false)
-	portal.triggered = true
-	portal.linkStage = stage
-	print(portal.get_parent().name)
+
+	Global.setPortal(currentStage.name, portalEntered.direction, stage)
+
 	blur(false)
 	loadScene(stage)
-	changeStage(stage, portal)
+	changeStage(stage, portalEntered, true)
 
-func changeStage(stage:StageReference, portal: Portal) -> void:
+func changeStage(stage: StageReference, portalEntered: Portal, new:bool = false) -> void:
+	print("Changing stage to %s via portal %d"%[stage.name, portalEntered.direction])
 	var oldStage: StageReference;
 	for child in $frameVP.get_children():
 		if child.is_in_group("stage"):
 			oldStage = StageReference.new(child, "")
-			
 			child.queue_free()
-	call_deferred("loadSceneInstance", stage, portal.direction, oldStage)
+			$frameVP.call_deferred("remove_child",child)
+	currentStage = stage
+	call_deferred("loadSceneInstance", stage, portalEntered.direction, oldStage, new)
 	
-func loadSceneInstance(stage:StageReference, direction: Portal.portalDirection, oldStage: StageReference) -> void:
+func loadSceneInstance(stage: StageReference, direction: Portal.portalDirection, oldStage: StageReference, new:bool) -> void:
 	var packed_scene = sceneCache[stage.name]
 	if not packed_scene or not packed_scene is PackedScene:
 		print("Error: Scene for %s is not loaded properly." % stage.name)
@@ -89,9 +95,9 @@ func loadSceneInstance(stage:StageReference, direction: Portal.portalDirection, 
 		print("Error: Failed to instantiate scene for %s." % stage.name)
 		return
 	$frameVP.add_child(instance)
-	portalUpdate(oldStage, direction, instance)
+	portalUpdate(oldStage, direction, instance, stage, new)
 
-func portalUpdate(oldStage: StageReference, direction: Portal.portalDirection, instance) -> void:
+func portalUpdate(oldStage: StageReference, direction: Portal.portalDirection, instance: Node2D, stage:StageReference, new:bool) -> void:
 	player.linear_velocity = Vector2.ZERO
 	
 	var exitPortal: Portal;
@@ -108,8 +114,10 @@ func portalUpdate(oldStage: StageReference, direction: Portal.portalDirection, i
 		print("Error: No exit portal found in the new stage.")
 		return
 		
-	exitPortal.triggered = true
-	exitPortal.linkStage = oldStage
+	if new:
+		Global.setPortal(stage.name, Portal.reverseDir(direction), oldStage)
 	
 	player.position = exitPortal.position + exitPortal.exitOffset()
+	$frameVP/Camera2D.position = player.position
+	player.collision_layer = 2
 	# remove outers...

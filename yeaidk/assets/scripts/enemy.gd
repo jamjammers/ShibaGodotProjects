@@ -40,10 +40,14 @@ func attackProcess():
 
 func attack():
 	physics_material_override.friction = 0
+	linear_velocity /=2
+
 	if (target.position.x > position.x):
-		apply_central_impulse(Vector2(500, -300));
+		apply_central_force(Vector2(500, -300) * 60)
+		# linear_velocity += (Vector2(500, -300));
 	else:
-		apply_central_impulse(Vector2(-500, -300));
+		apply_central_force(Vector2(-500, -300) * 60)
+		# linear_velocity += (Vector2(-500, -300));
 
 func enterFreeze(freezeState:bool) -> void:
 	
@@ -77,10 +81,10 @@ func _on_detection_body_exited(body: Node2D) -> void:
 
 @warning_ignore("unused_parameter")
 func _on_contact_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
-	var shape_owner: Node = body.shape_owner_get_owner(body.shape_find_owner(body_shape_index))
+	var shape_owner: Node2D = body.shape_owner_get_owner(body.shape_find_owner(body_shape_index))
 
 	if (body.name == "Player"):
 		body.hit()
-	elif(shape_owner.is_in_group("groundTop")):
-		physics_material_override.friction = 0.9
+	elif(shape_owner.is_in_group("groundTop") and shape_owner.position.y < position.y):
+		physics_material_override.friction = 1
 	pass # Replace with function body.

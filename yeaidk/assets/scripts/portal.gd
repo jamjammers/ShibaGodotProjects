@@ -7,16 +7,12 @@ enum portalDirection{
 static func reverseDir(dir: portalDirection) -> portalDirection:
 	return ((dir + 2) % 4) as portalDirection
 
-@export var triggered := false
-
 @export var direction : portalDirection = portalDirection.LEFT;
-
-var linkStage: StageReference = null;
 
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
-		body.enterPortal(self, !triggered, linkStage)
+		body.enterPortal(self)
 		
 
 func exitOffset() -> Vector2:

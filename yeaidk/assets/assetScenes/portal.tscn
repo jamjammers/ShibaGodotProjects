@@ -13,6 +13,7 @@ shader_parameter/vertical = false
 size = Vector2(17, 120)
 
 [node name="portal" type="Area2D" groups=["portal"]]
+collision_layer = 16
 collision_mask = 2
 script = ExtResource("1_urc2y")
 

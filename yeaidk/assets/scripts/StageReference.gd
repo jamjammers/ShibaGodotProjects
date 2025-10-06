@@ -15,7 +15,18 @@ func _init(stage: Node2D = null, path: String = "") -> void:
 				portals.append(stageChild.direction)
 	elif path != "":
 		stagePath = path
-		name = path.get_file().get_basename() # Or parse name from path if needed
+
+		var packed = ResourceLoader.load(stagePath)
+		if packed and packed is PackedScene:
+			var inst = packed.instantiate()
+			if inst and inst is Node2D:
+				name = inst.name
+				inst.queue_free()
+			else:
+				print("cry me a river")
+		else:
+			print("cry me a river")
+		 # Or parse name from path if needed
 	else:
 		push_error("StageReference must be initialized with either a Node2D or a stage path.")
 
@@ -24,6 +35,9 @@ func loadStage():
 	return ResourceLoader.load(stagePath) 
 
 func getImage() -> ImageTexture:
+	if FileAccess.file_exists("res://assets/images/stagePreview/%s.png" % name) == false:
+		# print("Warning: No preview image found for stage %s"%name)
+		return null
 	var texture: Texture2D = load("res://assets/images/stagePreview/%s.png" % name)
 	if !texture:
 		print("Error: Failed to load image for stage %s"%name)
