@@ -25,6 +25,12 @@ var facing: int;
 
 var test = false;
 
+func _ready() -> void:
+	gravity_scale = 3
+	facing = 1
+	$dashTimer.wait_time = 0.5
+	get_viewport().handle_input_locally = true
+	pass # Replace with function body.
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("test"):
@@ -41,7 +47,7 @@ func _process(delta: float) -> void:
 		wallJump()
 	else:
 		jump()
-		
+		attack()
 		dash()
 
 func _physics_process(delta):
@@ -53,6 +59,14 @@ func _physics_process(delta):
 		pass
 	else:
 		horizMovement(delta)
+
+func _input(event):
+	print(event.as_text())
+	if event is InputEventMouseButton:
+		print("Screen coords: ", event.position)
+		print("World coords: ", get_global_mouse_position())
+
+
 
 # movement checks and executions
 func testModeMovement():
@@ -124,6 +138,29 @@ func horizMovement(delta):
 	else:
 		# Friction when no input
 		linear_velocity.x = move_toward(linear_velocity.x, 0, friction * delta)
+func attack():
+	if Input.is_action_just_pressed("attack") == false:
+		return
+	if !($spear/stabTimer.is_stopped()):
+		return
+	var mouse_pos = get_local_mouse_position()
+	var pos2 = get_viewport().get_mouse_position()
+	var vp = get_viewport()
+	var mouse_view := vp.get_mouse_position()
+
+	var mouse_world: Vector2 = vp.get_canvas_transform().affine_inverse().basis_xform(mouse_view)
+
+	# print(mouse_view)
+	# print(mouse_world)
+
+	# print(mouse_pos)
+	# print(pos2)
+	var dir = (mouse_pos - global_position).normalized()
+	# print(dir)
+	$spear.rotation = dir.angle()
+	$spear.stab()
+	pass
+
 
 func enterFreeze(freezeState = true) -> void:
 	freeze = freezeState

@@ -1,0 +1,59 @@
+[gd_scene load_steps=4 format=3 uid="uid://b61v28r3xthw3"]
+
+[ext_resource type="Script" uid="uid://drse0m3ogerjh" path="res://assets/scripts/spear.gd" id="1_yyxpl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vq3oe"]
+size = Vector2(35.5, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yyxpl"]
+size = Vector2(10, 10)
+
+[node name="spear" type="Area2D"]
+script = ExtResource("1_yyxpl")
+
+[node name="shaft" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -102.0
+offset_top = -5.0
+offset_right = 102.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="point" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 104.75
+offset_top = -7.0
+offset_right = 114.75
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.7853982
+size_flags_horizontal = 4
+size_flags_vertical = 4
+color = Color(1, 0, 0, 1)
+
+[node name="shaftCol" type="CollisionShape2D" parent="."]
+position = Vector2(85, 0)
+shape = SubResource("RectangleShape2D_vq3oe")
+
+[node name="pointCol" type="CollisionShape2D" parent="."]
+position = Vector2(104.75, 0)
+rotation = 0.7853982
+shape = SubResource("RectangleShape2D_yyxpl")
+
+[node name="stabTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="timeout" from="stabTimer" to="." method="_on_stab_timer_timeout"]

@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cchnc2wed5tb6"]
+[gd_scene load_steps=6 format=3 uid="uid://cchnc2wed5tb6"]
 
 [ext_resource type="Script" uid="uid://ccjmheubek61d" path="res://assets/scripts/player.gd" id="1_fksrs"]
 [ext_resource type="PackedScene" uid="uid://c4pi8242nxsjo" path="res://assets/assetScenes/color_capsule.tscn" id="2_rsc3f"]
+[ext_resource type="PackedScene" uid="uid://b61v28r3xthw3" path="res://assets/assetScenes/spear.tscn" id="3_6xwpp"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fksrs"]
 friction = 0.0
@@ -34,6 +35,9 @@ shape = SubResource("RectangleShape2D_rsc3f")
 color = Color(0, 0.7666669, 1, 1)
 radius = 20.0
 height = 80.0
+
+[node name="spear" parent="." instance=ExtResource("3_6xwpp")]
+position = Vector2(40, 0)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]

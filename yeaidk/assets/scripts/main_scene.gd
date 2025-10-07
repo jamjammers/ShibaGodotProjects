@@ -14,6 +14,7 @@ func _ready() -> void:
 	blur(false)
 	sceneCache["startStage"] = load("res://assets/levels/reservedStages/startStage.tscn")
 	player = $frameVP/Player
+	$frameVP.handle_input_locally = true  
 	pass # Replace with function body.
 
 func _on_player_portal(portalEntered: Portal) -> void:
@@ -29,6 +30,12 @@ func _on_player_portal(portalEntered: Portal) -> void:
 		changeStage(targetStage, portalEntered)
 		pass
 	
+func _input(event):
+	if event is InputEventMouseButton:
+		print("Screen coords: ", event.position)
+		print("vp coords: ", $frameVP.get_mouse_position())
+
+
 func loadScene(stage: StageReference):
 	if !sceneCache.has(stage.name):
 		var scene = stage.loadStage()
