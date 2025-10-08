@@ -46,8 +46,8 @@ func _process(delta: float) -> void:
 
 	wallAttachCheck()
 
-	if wallTouch and not groundContacts.size():
-		wallJump(true)
+	if (wallTouch and not groundContacts.size()) or wallAsim:
+		wallJump()
 	if (wallAsim):
 		pass
 	else:
@@ -93,6 +93,7 @@ func jump():
 	if (groundContacts.size() > 0):
 		apply_central_impulse(Vector2(0, -1000))
 		jumping = -500
+		print("reg ju")
 	elif (!doubleJumped and abilities.double_jump):
 		linear_velocity.y = -100
 		apply_central_impulse(Vector2(0, -1000))
@@ -101,12 +102,12 @@ func jump():
 func wallJump(fromWall: bool = false):
 	if !Input.is_action_just_pressed("jump"):
 		return
-	var inputDir = Input.get_axis("moveLeft", "moveRight")
 	linear_velocity.y = -1000
-	var mult = round(inputDir) if !fromWall else -facing
+	var mult = -facing
 	linear_velocity.x = 700 * mult
 	doubleJumped = false;
-	jumping = -500
+	print("wall jump"+str(fromWall))
+	jumping = -0
 	wallAsim = false
 	gravity_scale = 3
 func dash():

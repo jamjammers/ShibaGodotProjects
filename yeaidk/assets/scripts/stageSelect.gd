@@ -9,6 +9,7 @@ var displaying := false
 
 func _ready() -> void:
 	randomize()
+	$RichTextLabel.hide()
 	
 	var dir = DirAccess.open("res://assets/levels")
 	if dir:
@@ -23,10 +24,12 @@ func _ready() -> void:
 func display(portalEntered: Portal):
 	var stages = randomStages(3, portalEntered)
 	var buttons = genButtons(stages, portalEntered);
+	$RichTextLabel.show()
 	for b in buttons:
 		add_child(b)
 
 func stopDisplay(stage:StageReference, portalEntered: Portal):
+	$RichTextLabel.hide()
 	for child in get_children():
 		if child is Button:
 			child.queue_free()

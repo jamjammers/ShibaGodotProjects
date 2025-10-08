@@ -84,7 +84,6 @@ func _on_detection_body_exited(body: Node2D) -> void:
 @warning_ignore("unused_parameter")
 func _on_contact_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	var shape_owner: Node2D = body.shape_owner_get_owner(body.shape_find_owner(body_shape_index))
-	print(body.name)
 	if (body.name == "Player"):
 		body.hit(body.global_position > global_position)
 	

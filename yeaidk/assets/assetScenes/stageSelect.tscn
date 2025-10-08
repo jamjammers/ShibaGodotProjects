@@ -13,3 +13,14 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
 script = ExtResource("1_2o2lk")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = -382.0
+offset_top = -207.5
+offset_right = 367.5
+offset_bottom = -139.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 40
+text = "Choose a stage or something i guess"
+tab_size = 24
