@@ -59,5 +59,6 @@ func randomStages(n: int, portal: Portal) -> Array[StageReference]:
 
 #stuff for button presses
 func buttonPress(stage:StageReference, portalEntered: Portal):
+	list.erase(stage)
 	stopDisplay(stage, portalEntered)
 	pass

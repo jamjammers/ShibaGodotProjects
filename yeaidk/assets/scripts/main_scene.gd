@@ -11,13 +11,14 @@ var shaderBlurState := false
 var currentStage: StageReference = StageReference.new(null, "res://assets/levels/reservedStages/startStage.tscn")
 
 func _ready() -> void:
-	blur(false)
+	# blur(false)
 	sceneCache["startStage"] = load("res://assets/levels/reservedStages/startStage.tscn")
-	player = $frameVP/Player
-	$frameVP.handle_input_locally = true  
+	player = $VPContainer/frameVP/Player
+	$VPContainer/frameVP.handle_input_locally = true  
 	pass # Replace with function body.
 
 func _on_player_portal(portalEntered: Portal) -> void:
+	print("goober")
 	var new = Global.getPortal(currentStage.name, portalEntered.direction) == null
 	if new:
 		$stageSelect.display(portalEntered)
@@ -29,11 +30,16 @@ func _on_player_portal(portalEntered: Portal) -> void:
 
 		changeStage(targetStage, portalEntered)
 		pass
-	
+
 func _input(event):
-	if event is InputEventMouseButton:
-		print("Screen coords: ", event.position)
-		print("vp coords: ", $frameVP.get_mouse_position())
+	if event is InputEventMouseButton:		
+		# Convert to SubViewport coordinates
+		var local_pos = $VPContainer.get_local_mouse_position()
+		
+		# Send to SubViewport manually
+		var new_event = event.duplicate()
+		new_event.position = local_pos
+		$VPContainer/frameVP.push_input(new_event)
 
 
 func loadScene(stage: StageReference):
@@ -47,9 +53,9 @@ func loadScene(stage: StageReference):
 func freezeScene(freezeState = true) -> void:
 	screenFreezeState = freezeState
 
-	$frameVP/Player.call_deferred("enterFreeze", freezeState)
+	$VPContainer/frameVP/Player.call_deferred("enterFreeze", freezeState)
 	#search for stages
-	for child in $frameVP.get_children():
+	for child in $VPContainer/frameVP.get_children():
 		if !(child.is_in_group("stage")):
 			continue
 		#search for things that can be frozen I guess
@@ -61,16 +67,18 @@ func freezeScene(freezeState = true) -> void:
 			node.call_deferred("enterFreeze", (freezeState))
 
 func blur(value = null) -> void:
+	var shader_material = $VPContainer/frameVP/blurShader2.material as ShaderMaterial
+	var shader_material2 = $blurShader.material as ShaderMaterial
+	
 	if value == null:
-		var shader_material = $frame.material as ShaderMaterial
-
 		shaderBlurState = not shaderBlurState
 		(shader_material).set_shader_parameter("go", shaderBlurState)
+		(shader_material2).set_shader_parameter("go", shaderBlurState)
 	elif (value is bool):
-		var shader_material = $frame.material as ShaderMaterial
 
 		shaderBlurState = value
 		(shader_material).set_shader_parameter("go", shaderBlurState)
+		(shader_material2).set_shader_parameter("go", shaderBlurState)
 
 func buttonSelect(stage: StageReference, portalEntered: Portal) -> void:
 	freezeScene(false)
@@ -84,11 +92,11 @@ func buttonSelect(stage: StageReference, portalEntered: Portal) -> void:
 func changeStage(stage: StageReference, portalEntered: Portal, new:bool = false) -> void:
 	print("Changing stage to %s via portal %d"%[stage.name, portalEntered.direction])
 	var oldStage: StageReference;
-	for child in $frameVP.get_children():
+	for child in $VPContainer/frameVP.get_children():
 		if child.is_in_group("stage"):
 			oldStage = StageReference.new(child, "")
 			child.queue_free()
-			$frameVP.call_deferred("remove_child",child)
+			$VPContainer/frameVP.call_deferred("remove_child",child)
 	currentStage = stage
 	call_deferred("loadSceneInstance", stage, portalEntered.direction, oldStage, new)
 	
@@ -101,7 +109,7 @@ func loadSceneInstance(stage: StageReference, direction: Portal.portalDirection,
 	if not instance or not instance is Node2D:
 		print("Error: Failed to instantiate scene for %s." % stage.name)
 		return
-	$frameVP.add_child(instance)
+	$VPContainer/frameVP.add_child(instance)
 	portalUpdate(oldStage, direction, instance, stage, new)
 
 func portalUpdate(oldStage: StageReference, direction: Portal.portalDirection, instance: Node2D, stage:StageReference, new:bool) -> void:
@@ -125,6 +133,6 @@ func portalUpdate(oldStage: StageReference, direction: Portal.portalDirection, i
 		Global.setPortal(stage.name, Portal.reverseDir(direction), oldStage)
 	
 	player.position = exitPortal.position + exitPortal.exitOffset()
-	$frameVP/Camera2D.position = player.position
+	$VPContainer/frameVP/Camera2D.position = player.position
 	player.collision_layer = 2
 	# remove outers...

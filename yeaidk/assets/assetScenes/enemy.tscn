@@ -41,12 +41,13 @@ shape = SubResource("CircleShape2D_vbccy")
 
 [node name="contact" type="Area2D" parent="."]
 collision_layer = 8
-collision_mask = 3
+collision_mask = 35
 
 [node name="ContactCol" type="CollisionShape2D" parent="contact" groups=["enemies"]]
 shape = SubResource("RectangleShape2D_vbccy")
 
 [connection signal="body_entered" from="detectionArea" to="." method="_on_detection_body_entered"]
 [connection signal="body_exited" from="detectionArea" to="." method="_on_detection_body_exited"]
+[connection signal="area_entered" from="contact" to="." method="_on_contact_area_entered"]
 [connection signal="body_entered" from="contact" to="." method="_on_contact_body_entered"]
 [connection signal="body_shape_entered" from="contact" to="." method="_on_contact_body_shape_entered"]

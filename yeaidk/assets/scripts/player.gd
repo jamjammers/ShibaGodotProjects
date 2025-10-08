@@ -9,8 +9,10 @@ signal portal(direction: Portal.portalDirection, new)
 
 var frozen := false
 
-var groundTouching := 0
 var jumping := 0
+
+var groundContacts := []
+
 var wallTouch := false
 var wallAsim := false
 
@@ -18,7 +20,7 @@ var hp := 5
 
 var stored_velocity: Vector2 = Vector2.ZERO
 
-var abilities := {"dash": true, "double_jump": true, "wall_attach": true};
+var abilities := {"dash": true, "double_jump": false, "wall_attach": true};
 var dashed := false # can only dash once per groundTouching state
 var doubleJumped := false # can only double once per groundTouching
 var facing: int;
@@ -60,14 +62,6 @@ func _physics_process(delta):
 	else:
 		horizMovement(delta)
 
-func _input(event):
-	print(event.as_text())
-	if event is InputEventMouseButton:
-		print("Screen coords: ", event.position)
-		print("World coords: ", get_global_mouse_position())
-
-
-
 # movement checks and executions
 func testModeMovement():
 	if Input.is_action_pressed("moveLeft"):
@@ -91,11 +85,10 @@ func wallAttachCheck():
 func jump():
 	if (!Input.is_action_just_pressed("jump")):
 		return
-
-	if (groundTouching):
+	if (groundContacts.size() > 0):
 		apply_central_impulse(Vector2(0, -1000))
 		jumping = -500
-	elif (!doubleJumped):
+	elif (!doubleJumped and abilities.double_jump):
 		linear_velocity.y = -100
 		apply_central_impulse(Vector2(0, -1000))
 
@@ -118,7 +111,7 @@ func dash():
 		return
 	if !Input.is_action_just_pressed("dash"):
 		return
-	if !groundTouching:
+	if groundContacts.size() == 0:
 		dashed = true
 	linear_velocity.y = -200;
 	
@@ -138,25 +131,19 @@ func horizMovement(delta):
 	else:
 		# Friction when no input
 		linear_velocity.x = move_toward(linear_velocity.x, 0, friction * delta)
+func wallAsimMovement(delta):
+	if !wallAsim:
+		return
+	var input_dir = Input.get_axis("moveUp", "moveDown")
+	position.y += input_dir * speed * delta
 func attack():
 	if Input.is_action_just_pressed("attack") == false:
 		return
 	if !($spear/stabTimer.is_stopped()):
 		return
-	var mouse_pos = get_local_mouse_position()
-	var pos2 = get_viewport().get_mouse_position()
-	var vp = get_viewport()
-	var mouse_view := vp.get_mouse_position()
+	var mouse_pos = get_global_mouse_position()
 
-	var mouse_world: Vector2 = vp.get_canvas_transform().affine_inverse().basis_xform(mouse_view)
-
-	# print(mouse_view)
-	# print(mouse_world)
-
-	# print(mouse_pos)
-	# print(pos2)
 	var dir = (mouse_pos - global_position).normalized()
-	# print(dir)
 	$spear.rotation = dir.angle()
 	$spear.stab()
 	pass
@@ -178,33 +165,39 @@ func enterFreeze(freezeState = true) -> void:
 	# linear_velocity = Vector2.ZERO
 	# gravity_scale = 0
 
+func hit(fromRight: bool) -> void:
+	if fromRight:
+		print("hit from right")
+		linear_velocity=(Vector2(1200, -750))
+	else:
+		print("hit from left")
+		linear_velocity = Vector2(-1200, -750)
+	hp -= 1
+	hurt.emit(hp)
+	print("Incomplete: got hurt. "+str(hp)+" hp remains");
+
+func enterPortal(portalEntered: Portal) -> void:
+	portal.emit(portalEntered)
+
+
 @warning_ignore("unused_parameter")
 func _on_body_shape_entered(body_rid: RID, body: Node, body_shape_index: int, local_shape_index: int) -> void:
 	var shape_owner: Node = body.shape_owner_get_owner(body.shape_find_owner(body_shape_index))
-	
 	if (shape_owner.is_in_group("groundTop")):
-		groundTouching += 1
+		if not groundContacts.has(shape_owner):
+			groundContacts.append(shape_owner)
 		doubleJumped = false;
 		dashed = false;
 
 	elif (shape_owner.is_in_group("wallSide")):
 		wallTouch = true
 
-#trigger when hit by enemy
-func hit():
-	hp -= 1
-	hurt.emit(hp)
-	print("Incomplete: got hurt. "+str(hp)+" hp remains");
-
-#trigger when hit portal
-func enterPortal(portalEntered: Portal) -> void:
-	portal.emit(portalEntered)
-
 @warning_ignore("unused_parameter")
 func _on_body_shape_exited(body_rid: RID, body: Node, body_shape_index: int, local_shape_index: int) -> void:
 	var shape_owner: Node = body.shape_owner_get_owner(body.shape_find_owner(body_shape_index))
 	if (shape_owner.is_in_group("groundTop")):
-		groundTouching -= 1
+		groundContacts.erase(shape_owner)
+
 	elif (shape_owner.is_in_group("wallSide")):
 		wallTouch = false
 		facing = int(linear_velocity.x / abs(linear_velocity.x)) if linear_velocity.x != 0 else 0

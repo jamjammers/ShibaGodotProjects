@@ -4,6 +4,9 @@ var target: Node2D = null;
 var timer: float = 0.0;
 
 var stored_velocity: Vector2 = Vector2.ZERO
+
+var hp := 3
+
 func _physics_process(delta):
 	timer -= delta
 	queue_redraw()
@@ -78,13 +81,26 @@ func _on_detection_body_exited(body: Node2D) -> void:
 		
 		queue_redraw()
 
-
 @warning_ignore("unused_parameter")
 func _on_contact_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	var shape_owner: Node2D = body.shape_owner_get_owner(body.shape_find_owner(body_shape_index))
-
+	print(body.name)
 	if (body.name == "Player"):
-		body.hit()
+		body.hit(body.global_position > global_position)
+	
 	elif(shape_owner.is_in_group("groundTop") and shape_owner.position.y < position.y):
 		physics_material_override.friction = 1
+	pass # Replace with function body.
+
+
+func _on_contact_area_entered(area: Area2D) -> void:
+	if (area.name == "spear"):
+		hp -=1
+		var dir = area.global_position > global_position
+		if dir:
+			apply_central_impulse(Vector2(-500, -200))
+		else:
+			apply_central_impulse(Vector2(500, -200))
+		if (hp <= 0):
+			queue_free()
 	pass # Replace with function body.

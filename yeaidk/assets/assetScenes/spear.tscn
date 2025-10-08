@@ -9,6 +9,7 @@ size = Vector2(35.5, 10)
 size = Vector2(10, 10)
 
 [node name="spear" type="Area2D"]
+collision_layer = 32
 script = ExtResource("1_yyxpl")
 
 [node name="shaft" type="ColorRect" parent="."]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbr6hcqvt3jkm"]
+[gd_scene load_steps=6 format=3 uid="uid://cbr6hcqvt3jkm"]
 
 [ext_resource type="Script" uid="uid://bq4srhtii8ust" path="res://assets/scripts/portal.gd" id="1_urc2y"]
 [ext_resource type="Shader" uid="uid://cbtamm1jc71ue" path="res://assets/textures/portalGradient.gdshader" id="2_urc2y"]
@@ -11,6 +11,9 @@ shader_parameter/vertical = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v4f56"]
 size = Vector2(17, 120)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_urc2y"]
+size = Vector2(10, 120)
 
 [node name="portal" type="Area2D" groups=["portal"]]
 collision_layer = 16
@@ -31,5 +34,11 @@ metadata/_edit_use_anchors_ = true
 [node name="Collider" type="CollisionShape2D" parent="." groups=["portal"]]
 position = Vector2(8.5, 0)
 shape = SubResource("RectangleShape2D_v4f56")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-5, 0)
+shape = SubResource("RectangleShape2D_urc2y")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

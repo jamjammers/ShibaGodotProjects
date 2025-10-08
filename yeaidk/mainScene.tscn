@@ -1,15 +1,22 @@
-[gd_scene load_steps=10 format=3 uid="uid://bdmj1sekwkwdr"]
+[gd_scene load_steps=13 format=3 uid="uid://bdmj1sekwkwdr"]
 
 [ext_resource type="Script" uid="uid://bag03enyan56a" path="res://assets/scripts/main_scene.gd" id="1_0pyiw"]
 [ext_resource type="PackedScene" uid="uid://dep25nrtxqtas" path="res://assets/levels/reservedStages/startStage.tscn" id="1_6mfv6"]
 [ext_resource type="PackedScene" uid="uid://cchnc2wed5tb6" path="res://assets/assetScenes/Player.tscn" id="2_g4qto"]
+[ext_resource type="Shader" uid="uid://brnq2pdoamt3k" path="res://assets/textures/gaussian_blur.gdshader" id="3_bnlnp"]
 [ext_resource type="Script" uid="uid://c5gfppe15rdlu" path="res://assets/scripts/camSC.gd" id="4_6mfv6"]
 [ext_resource type="PackedScene" uid="uid://b0a3eiv08sirm" path="res://assets/assetScenes/HUD.tscn" id="4_61od6"]
 [ext_resource type="Material" uid="uid://dk8bubicedxpm" path="res://assets/textures/blur_shader.tres" id="5_we1jl"]
 [ext_resource type="PackedScene" uid="uid://bhkpe020nssxk" path="res://assets/assetScenes/stageSelect.tscn" id="6_2qqqv"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vuu3o"]
+shader = ExtResource("3_bnlnp")
+shader_parameter/blur_amount = 2.0
+shader_parameter/direction = Vector2(1, 0)
+shader_parameter/go = false
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_2qqqv"]
-viewport_path = NodePath("frameVP")
+viewport_path = NodePath("VPContainer/frameVP")
 
 [sub_resource type="GDScript" id="GDScript_bnlnp"]
 script/source = "extends TextureRect
@@ -29,21 +36,46 @@ func blur():
 	pass
 "
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bnlnp"]
+shader = ExtResource("3_bnlnp")
+shader_parameter/blur_amount = 2.0
+shader_parameter/direction = Vector2(0, 1)
+shader_parameter/go = false
+
 [node name="mainScene" type="Node"]
 script = ExtResource("1_0pyiw")
 
-[node name="frameVP" type="SubViewport" parent="."]
-size = Vector2i(2000, 1000)
+[node name="VPContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
 
-[node name="Camera2D" type="Camera2D" parent="frameVP" node_paths=PackedStringArray("target")]
+[node name="frameVP" type="SubViewport" parent="VPContainer"]
+handle_input_locally = false
+size = Vector2i(2000, 1000)
+render_target_update_mode = 4
+
+[node name="Camera2D" type="Camera2D" parent="VPContainer/frameVP" node_paths=PackedStringArray("target")]
 zoom = Vector2(2, 2)
 script = ExtResource("4_6mfv6")
 target = NodePath("../Player")
 
-[node name="Player" parent="frameVP" instance=ExtResource("2_g4qto")]
+[node name="Player" parent="VPContainer/frameVP" instance=ExtResource("2_g4qto")]
 position = Vector2(103, 889)
 
-[node name="startStage" parent="frameVP" instance=ExtResource("1_6mfv6")]
+[node name="startStage" parent="VPContainer/frameVP" instance=ExtResource("1_6mfv6")]
+
+[node name="blurShader2" type="ColorRect" parent="VPContainer/frameVP"]
+material = SubResource("ShaderMaterial_vuu3o")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
 
 [node name="frame" type="TextureRect" parent="."]
 material = ExtResource("5_we1jl")
@@ -61,9 +93,19 @@ grow_vertical = 2
 texture = SubResource("ViewportTexture_2qqqv")
 script = SubResource("GDScript_bnlnp")
 
+[node name="blurShader" type="ColorRect" parent="."]
+z_index = 1
+material = SubResource("ShaderMaterial_bnlnp")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+
 [node name="HUD" parent="." instance=ExtResource("4_61od6")]
 
 [node name="stageSelect" parent="." instance=ExtResource("6_2qqqv")]
 
-[connection signal="hurt" from="frameVP/Player" to="HUD" method="_on_player_hurt"]
-[connection signal="portal" from="frameVP/Player" to="." method="_on_player_portal"]
+[connection signal="hurt" from="VPContainer/frameVP/Player" to="HUD" method="_on_player_hurt"]
+[connection signal="portal" from="VPContainer/frameVP/Player" to="." method="_on_player_portal"]

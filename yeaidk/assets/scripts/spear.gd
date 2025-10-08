@@ -12,10 +12,12 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if state == "stabbing":
-		position.x += speed * delta
+		position.x += speed * delta * cos(rotation)
+		position.y += speed * delta * sin(rotation)
 	elif state == "retracting":
 
-		position.x -= speed * delta
+		position.x -= speed * delta * cos(rotation)
+		position.y -= speed * delta * sin(rotation)
 	pass # Replace with function body.
 
 func stab() -> void:
@@ -40,6 +42,7 @@ func off() -> void:
 
 	$pointCol.disabled = true
 	position.x = 0
+	position.y = 0
 
 
 func _on_stab_timer_timeout() -> void:
