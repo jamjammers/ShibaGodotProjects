@@ -14,6 +14,7 @@ var groundContacts := []
 
 var wallTouch := false
 var wallAsim := false
+var wallAsimable := false
 
 var hp := 5
 
@@ -49,6 +50,7 @@ func _process(delta: float) -> void:
 	if (wallTouch and not groundContacts.size()) or wallAsim:
 		wallJump()
 	if (wallAsim):
+		wallAsimMovement()
 		pass
 	else:
 		jump()
@@ -78,10 +80,11 @@ func testModeMovement():
 	if Input.is_action_pressed("moveDown"):
 		position.y += 100
 func wallAttachCheck():
+	if !wallAsimable:
+		return
 	if !Input.is_action_just_pressed("wallAttach"):
 		return
-	if !wallTouch:
-		return
+	
 	if !abilities.wall_attach:
 		return
 	wallAsim = !wallAsim
@@ -137,11 +140,12 @@ func horizMovement(delta):
 	else:
 		# Friction when no input
 		linear_velocity.x = move_toward(linear_velocity.x, 0, friction * delta)
-func wallAsimMovement(delta):
+func wallAsimMovement():
 	if !wallAsim:
 		return
-	var input_dir = Input.get_axis("moveUp", "moveDown")
-	position.y += input_dir * speed * delta
+	var verticalAxis = Input.get_axis("moveUp", "moveDown")
+	linear_velocity.y = verticalAxis * speed
+	
 func attack():
 	if Input.is_action_just_pressed("attack") == false:
 		return
@@ -186,7 +190,7 @@ func enterPortal(portalEntered: Portal) -> void:
 
 @warning_ignore("unused_parameter")
 func _on_body_shape_entered(body_rid: RID, body: Node, body_shape_index: int, local_shape_index: int) -> void:
-	var shape_owner: Node = body.shape_owner_get_owner(body.shape_find_owner(body_shape_index))
+	var shape_owner: CollisionShape2D = body.shape_owner_get_owner(body.shape_find_owner(body_shape_index))
 	if (shape_owner.is_in_group("groundTop")):
 		if not groundContacts.has(shape_owner):
 			groundContacts.append(shape_owner)
@@ -195,6 +199,20 @@ func _on_body_shape_entered(body_rid: RID, body: Node, body_shape_index: int, lo
 
 	elif (shape_owner.is_in_group("wallSide")):
 		wallTouch = true
+		var shape = shape_owner.shape
+		var y = 0
+		var x = 0
+		var gtf = shape_owner.get_global_transform()
+		if shape is RectangleShape2D:
+			var ext = shape.extents
+			y = ext.y * 2 * gtf.y.length()
+			x = ext.x * 2 * gtf.x.length()
+			print(y)
+			print(x)
+		if y > 75 or x >75:
+			wallAsimable = true
+		else:
+			wallAsimable = false
 
 @warning_ignore("unused_parameter")
 func _on_body_shape_exited(body_rid: RID, body: Node, body_shape_index: int, local_shape_index: int) -> void:
@@ -205,3 +223,9 @@ func _on_body_shape_exited(body_rid: RID, body: Node, body_shape_index: int, loc
 	elif (shape_owner.is_in_group("wallSide")):
 		wallTouch = false
 		facing = int(linear_velocity.x / abs(linear_velocity.x)) if linear_velocity.x != 0 else 0
+		wallAsimable = false
+		if wallAsim:
+			wallAsim = false
+			linear_velocity.y = 0
+			gravity_scale = 0 if wallAsim else 3
+			apply_central_force(Vector2(700 * facing, -300)*60)
