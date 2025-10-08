@@ -11,7 +11,7 @@ var shaderBlurState := false
 var currentStage: StageReference = StageReference.new(null, "res://assets/levels/reservedStages/startStage.tscn")
 
 func _ready() -> void:
-	# blur(false)
+	blur(false)
 	sceneCache["startStage"] = load("res://assets/levels/reservedStages/startStage.tscn")
 	player = $VPContainer/frameVP/Player
 	$VPContainer/frameVP.handle_input_locally = true  
@@ -67,7 +67,7 @@ func freezeScene(freezeState = true) -> void:
 			node.call_deferred("enterFreeze", (freezeState))
 
 func blur(value = null) -> void:
-	var shader_material = $VPContainer/frameVP/blurShader2.material as ShaderMaterial
+	var shader_material = $frame.material as ShaderMaterial
 	var shader_material2 = $blurShader.material as ShaderMaterial
 	
 	if value == null:

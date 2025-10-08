@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bdmj1sekwkwdr"]
+[gd_scene load_steps=12 format=3 uid="uid://bdmj1sekwkwdr"]
 
 [ext_resource type="Script" uid="uid://bag03enyan56a" path="res://assets/scripts/main_scene.gd" id="1_0pyiw"]
 [ext_resource type="PackedScene" uid="uid://dep25nrtxqtas" path="res://assets/levels/reservedStages/startStage.tscn" id="1_6mfv6"]
@@ -6,14 +6,13 @@
 [ext_resource type="Shader" uid="uid://brnq2pdoamt3k" path="res://assets/textures/gaussian_blur.gdshader" id="3_bnlnp"]
 [ext_resource type="Script" uid="uid://c5gfppe15rdlu" path="res://assets/scripts/camSC.gd" id="4_6mfv6"]
 [ext_resource type="PackedScene" uid="uid://b0a3eiv08sirm" path="res://assets/assetScenes/HUD.tscn" id="4_61od6"]
-[ext_resource type="Material" uid="uid://dk8bubicedxpm" path="res://assets/textures/blur_shader.tres" id="5_we1jl"]
 [ext_resource type="PackedScene" uid="uid://bhkpe020nssxk" path="res://assets/assetScenes/stageSelect.tscn" id="6_2qqqv"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vuu3o"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_we1jl"]
 shader = ExtResource("3_bnlnp")
 shader_parameter/blur_amount = 2.0
 shader_parameter/direction = Vector2(1, 0)
-shader_parameter/go = false
+shader_parameter/go = true
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_2qqqv"]
 viewport_path = NodePath("VPContainer/frameVP")
@@ -68,17 +67,8 @@ position = Vector2(103, 889)
 
 [node name="startStage" parent="VPContainer/frameVP" instance=ExtResource("1_6mfv6")]
 
-[node name="blurShader2" type="ColorRect" parent="VPContainer/frameVP"]
-material = SubResource("ShaderMaterial_vuu3o")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 1, 1, 0)
-
 [node name="frame" type="TextureRect" parent="."]
-material = ExtResource("5_we1jl")
+material = SubResource("ShaderMaterial_we1jl")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -93,9 +83,14 @@ grow_vertical = 2
 texture = SubResource("ViewportTexture_2qqqv")
 script = SubResource("GDScript_bnlnp")
 
-[node name="blurShader" type="ColorRect" parent="."]
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
 z_index = 1
+rect = Rect2(-100, -100, 10000, 10000)
+
+[node name="blurShader" type="ColorRect" parent="."]
+z_index = 2
 material = SubResource("ShaderMaterial_bnlnp")
+use_parent_material = true
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -106,6 +101,7 @@ color = Color(1, 1, 1, 0)
 [node name="HUD" parent="." instance=ExtResource("4_61od6")]
 
 [node name="stageSelect" parent="." instance=ExtResource("6_2qqqv")]
+z_index = 2
 
 [connection signal="hurt" from="VPContainer/frameVP/Player" to="HUD" method="_on_player_hurt"]
 [connection signal="portal" from="VPContainer/frameVP/Player" to="." method="_on_player_portal"]
