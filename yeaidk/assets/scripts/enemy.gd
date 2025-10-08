@@ -96,6 +96,7 @@ func _on_contact_body_shape_entered(body_rid: RID, body: Node2D, body_shape_inde
 func _on_contact_area_entered(area: Area2D) -> void:
 	if (area.name == "spear"):
 		hp -=1
+		timer = min(timer +0.25, 1.5)
 		var dir = area.global_position > global_position
 		if dir:
 			apply_central_impulse(Vector2(-500, -200))

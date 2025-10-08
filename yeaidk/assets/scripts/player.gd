@@ -7,7 +7,6 @@ signal portal(direction: Portal.portalDirection, new)
 @export var acceleration = 6000.0
 @export var friction = 6000.0
 
-var frozen := false
 
 var jumping := 0
 
@@ -42,6 +41,8 @@ func _process(delta: float) -> void:
 		linear_velocity = Vector2.ZERO
 		return
 	
+	if freeze:
+		return
 
 	wallAttachCheck()
 
@@ -56,11 +57,13 @@ func _physics_process(delta):
 	if test:
 		testModeMovement()
 		return
-	jumpCont()
+	if freeze:
+		return
 	if (wallAsim):
 		pass
 	else:
 		horizMovement(delta)
+		jumpCont()
 
 # movement checks and executions
 func testModeMovement():
