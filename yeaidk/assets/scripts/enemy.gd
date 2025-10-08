@@ -99,9 +99,9 @@ func _on_contact_area_entered(area: Area2D) -> void:
 		timer = min(timer +0.25, 1.5)
 		var dir = area.global_position > global_position
 		if dir:
-			apply_central_impulse(Vector2(-500, -200))
+			linear_velocity=(Vector2(-500, -200))
 		else:
-			apply_central_impulse(Vector2(500, -200))
+			linear_velocity=(Vector2(500, -200))
 		if (hp <= 0):
 			queue_free()
 	pass # Replace with function body.

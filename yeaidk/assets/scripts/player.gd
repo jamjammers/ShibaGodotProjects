@@ -46,8 +46,10 @@ func _process(delta: float) -> void:
 
 	wallAttachCheck()
 
+	if wallTouch and not groundContacts.size():
+		wallJump(true)
 	if (wallAsim):
-		wallJump()
+		pass
 	else:
 		jump()
 		attack()
@@ -96,17 +98,17 @@ func jump():
 		apply_central_impulse(Vector2(0, -1000))
 
 		doubleJumped = true;
-func wallJump():
+func wallJump(fromWall: bool = false):
 	if !Input.is_action_just_pressed("jump"):
 		return
 	var inputDir = Input.get_axis("moveLeft", "moveRight")
-	linear_velocity.y = 0
-	var mult = inputDir if inputDir == facing else 0.0
-	apply_central_impulse(Vector2(mult * 800, -1000))
+	linear_velocity.y = -1000
+	var mult = round(inputDir) if !fromWall else -facing
+	linear_velocity.x = 700 * mult
 	doubleJumped = false;
 	jumping = -500
 	wallAsim = false
-	gravity_scale = 0 if wallAsim else 3
+	gravity_scale = 3
 func dash():
 	if (!abilities.dash or dashed):
 		return
@@ -170,10 +172,8 @@ func enterFreeze(freezeState = true) -> void:
 
 func hit(fromRight: bool) -> void:
 	if fromRight:
-		print("hit from right")
 		linear_velocity=(Vector2(1200, -750))
 	else:
-		print("hit from left")
 		linear_velocity = Vector2(-1200, -750)
 	hp -= 1
 	hurt.emit(hp)

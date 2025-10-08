@@ -18,7 +18,6 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 func _on_player_portal(portalEntered: Portal) -> void:
-	print("goober")
 	var new = Global.getPortal(currentStage.name, portalEntered.direction) == null
 	if new:
 		$stageSelect.display(portalEntered)

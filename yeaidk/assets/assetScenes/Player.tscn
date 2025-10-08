@@ -6,7 +6,6 @@
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fksrs"]
 friction = 0.0
-absorbent = true
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rsc3f"]
 size = Vector2(40, 80)
