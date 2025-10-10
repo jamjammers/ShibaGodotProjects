@@ -243,8 +243,20 @@ func _on_body_shape_exited(body_rid: RID, body: Node, body_shape_index: int, loc
 			wallAsim = false
 			linear_velocity.y = 0
 			gravity_scale = 0 if wallAsim else 3
-			apply_central_force(Vector2(700 * facing, -300)*60)
 
+			apply_central_force(Vector2(0, -300)*60)
+			callAfterDelay(apply_central_force, 0.07,[Vector2(700 * facing, 0)*60])
+
+func callAfterDelay(function: Callable, delay: float, args: Array = []) -> void:
+	var timer = Timer.new();
+	timer.one_shot = true
+	timer.wait_time = delay
+	add_child(timer)
+	timer.start()
+	timer.timeout.connect(func() -> void:
+		function.callv(args)
+		timer.queue_free()
+		)
 
 func _on_trigger_col_area_entered(area: Area2D) -> void:
 	if area.is_in_group("item"):
