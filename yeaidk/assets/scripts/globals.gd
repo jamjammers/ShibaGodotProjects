@@ -45,7 +45,7 @@ func setPortal(currentScene: String, portalDir: Portal.portalDirection, linkStag
 	if not sceneData.has(currentScene):
 		sceneData[currentScene] = {}
 	sceneData[currentScene]["portal"+str(portalDir)] = linkStage
-	print("\n"+str(Global.sceneData)+"\n")
+	# print("\n"+str(Global.sceneData)+"\n")
 
 func getPortal(sceneName: String, direction: Portal.portalDirection) -> StageReference:
 	if sceneData.has(sceneName) and sceneData[sceneName].has("portal"+str(direction)):

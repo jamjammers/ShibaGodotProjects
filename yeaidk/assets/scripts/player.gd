@@ -20,7 +20,7 @@ var hp := 5
 
 var stored_velocity: Vector2 = Vector2.ZERO
 
-var abilities := {"dash": true, "double_jump": false, "wall_attach": true};
+var abilities := {"dash": false, "double_jump": false, "wall_attach": false};
 var dashed := false # can only dash once per groundTouching state
 var doubleJumped := false # can only double once per groundTouching
 var facing: int;
@@ -36,12 +36,15 @@ func _ready() -> void:
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("test"):
-		test = true
-		gravity_scale = 0
-		print("Debug: "+str(position))
-		linear_velocity = Vector2.ZERO
+		test = !test
+		if test:
+			gravity_scale = 0
+			linear_velocity = Vector2.ZERO
+		else:
+			gravity_scale = 3
+	if test:
 		return
-	
+
 	if freeze:
 		return
 
@@ -96,20 +99,20 @@ func jump():
 	if (groundContacts.size() > 0):
 		apply_central_impulse(Vector2(0, -1000))
 		jumping = -500
-		print("reg ju")
 	elif (!doubleJumped and abilities.double_jump):
 		linear_velocity.y = -100
 		apply_central_impulse(Vector2(0, -1000))
 
 		doubleJumped = true;
-func wallJump(fromWall: bool = false):
+func wallJump():
 	if !Input.is_action_just_pressed("jump"):
+		return
+	if !abilities.wall_attach:
 		return
 	linear_velocity.y = -1000
 	var mult = -facing
 	linear_velocity.x = 700 * mult
 	doubleJumped = false;
-	print("wall jump"+str(fromWall))
 	jumping = -0
 	wallAsim = false
 	gravity_scale = 3
@@ -207,8 +210,6 @@ func _on_body_shape_entered(body_rid: RID, body: Node, body_shape_index: int, lo
 			var ext = shape.extents
 			y = ext.y * 2 * gtf.y.length()
 			x = ext.x * 2 * gtf.x.length()
-			print(y)
-			print(x)
 		if y > 75 or x >75:
 			wallAsimable = true
 		else:
@@ -229,3 +230,12 @@ func _on_body_shape_exited(body_rid: RID, body: Node, body_shape_index: int, loc
 			linear_velocity.y = 0
 			gravity_scale = 0 if wallAsim else 3
 			apply_central_force(Vector2(700 * facing, -300)*60)
+
+
+func _on_trigger_col_area_entered(area: Area2D) -> void:
+	if area.is_in_group("item"):
+		area.queue_free()
+		# inventory add item here
+		if area.type == Item.ItemType.ABILITY:
+			abilities[area.ability] = true
+	pass # Replace with function body.

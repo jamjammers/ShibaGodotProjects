@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://cr6aoy58o2y0e"]
+
+[ext_resource type="PackedScene" uid="uid://cbr6hcqvt3jkm" path="res://assets/assetScenes/portal.tscn" id="1_eoepq"]
+[ext_resource type="PackedScene" uid="uid://b5og601fwewkl" path="res://assets/assetScenes/platform.tscn" id="2_c78lt"]
+
+[node name="s8" type="Node2D" groups=["stage"]]
+
+[node name="ReferenceRect" type="ReferenceRect" parent="."]
+offset_right = 1000.0
+offset_bottom = 1000.0
+border_width = 2.0
+
+[node name="leftPortal" parent="." instance=ExtResource("1_eoepq")]
+position = Vector2(0, 900)
+
+[node name="Platform" parent="." instance=ExtResource("2_c78lt")]
+position = Vector2(780, 980)
+scale = Vector2(11, 1)
+
+[node name="rightPortal" parent="." instance=ExtResource("1_eoepq")]
+position = Vector2(1000, 900)
+rotation = 3.1415927
+direction = 2
+
+[node name="Platform2" parent="." instance=ExtResource("2_c78lt")]
+position = Vector2(220, 980)
+scale = Vector2(11, 1)
+
+[node name="downPortal" parent="." instance=ExtResource("1_eoepq")]
+position = Vector2(500, 1000)
+rotation = -1.5707964
+direction = 3

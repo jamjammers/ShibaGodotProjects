@@ -12,6 +12,7 @@ size = Vector2(40, 80)
 
 [node name="Player" type="RigidBody2D"]
 collision_layer = 2
+collision_mask = 65
 physics_material_override = SubResource("PhysicsMaterial_fksrs")
 gravity_scale = 3.0
 lock_rotation = true
@@ -27,6 +28,8 @@ wait_time = 0.5
 one_shot = true
 
 [node name="triggerCol" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 64
 
 [node name="Collider" type="CollisionShape2D" parent="triggerCol"]
 shape = SubResource("RectangleShape2D_rsc3f")
@@ -42,3 +45,4 @@ position = Vector2(40, 0)
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
 [connection signal="body_shape_exited" from="." to="." method="_on_body_shape_exited"]
+[connection signal="area_entered" from="triggerCol" to="." method="_on_trigger_col_area_entered"]

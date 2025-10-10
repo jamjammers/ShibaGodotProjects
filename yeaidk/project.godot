@@ -40,6 +40,7 @@ wallSide=""
 portal=""
 platform=""
 stage="stages"
+item=""
 
 [input]
 
@@ -97,3 +98,4 @@ attack={
 2d_physics/layer_4="enemy_collision"
 2d_physics/layer_5="portal"
 2d_physics/layer_6="weapons"
+2d_physics/layer_7="items"

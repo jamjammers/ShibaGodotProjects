@@ -2,7 +2,7 @@ extends Node
 
 
 var player: RigidBody2D = null
-var sceneCache: Dictionary[String, PackedScene] = {}
+var sceneCache: Dictionary[String, PackedScene] = {} #stageReference names, PackedScene
 
 var screenFreezeState := false
 
@@ -108,6 +108,7 @@ func loadSceneInstance(stage: StageReference, direction: Portal.portalDirection,
 	if not instance or not instance is Node2D:
 		print("Error: Failed to instantiate scene for %s." % stage.name)
 		return
+	instance.name = stage.name
 	$VPContainer/frameVP.add_child(instance)
 	portalUpdate(oldStage, direction, instance, stage, new)
 
