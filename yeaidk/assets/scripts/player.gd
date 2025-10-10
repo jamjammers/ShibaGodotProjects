@@ -25,6 +25,8 @@ var dashed := false # can only dash once per groundTouching state
 var doubleJumped := false # can only double once per groundTouching
 var facing: int;
 
+var itemsTouching := []
+
 var test = false;
 
 func _ready() -> void:
@@ -42,13 +44,14 @@ func _process(delta: float) -> void:
 			linear_velocity = Vector2.ZERO
 		else:
 			gravity_scale = 3
+
 	if test:
 		return
-
 	if freeze:
 		return
 
 	wallAttachCheck()
+	itemPickup()
 
 	if (wallTouch and not groundContacts.size()) or wallAsim:
 		wallJump()
@@ -93,6 +96,17 @@ func wallAttachCheck():
 	wallAsim = !wallAsim
 	linear_velocity.y = 0
 	gravity_scale = 0 if wallAsim else 3
+func itemPickup():
+	if itemsTouching.size() == 0:
+		return
+	if !Input.is_action_just_pressed("itemPickup"):
+		return
+
+	for area in itemsTouching:
+		area.queue_free()
+		if area.type == Item.ItemType.ABILITY:
+			abilities[area.ability] = true
+	itemsTouching.clear()
 func jump():
 	if (!Input.is_action_just_pressed("jump")):
 		return
@@ -147,7 +161,7 @@ func wallAsimMovement():
 	if !wallAsim:
 		return
 	var verticalAxis = Input.get_axis("moveUp", "moveDown")
-	linear_velocity.y = verticalAxis * speed
+	linear_velocity.y = verticalAxis * speed*2
 	
 func attack():
 	if Input.is_action_just_pressed("attack") == false:
@@ -234,8 +248,13 @@ func _on_body_shape_exited(body_rid: RID, body: Node, body_shape_index: int, loc
 
 func _on_trigger_col_area_entered(area: Area2D) -> void:
 	if area.is_in_group("item"):
-		area.queue_free()
+		itemsTouching.append(area)
 		# inventory add item here
 		if area.type == Item.ItemType.ABILITY:
 			abilities[area.ability] = true
+	pass # Replace with function body.
+
+func _on_trigger_col_area_exited(area: Area2D) -> void:
+	if area.is_in_group("item"):
+		itemsTouching.erase(area)
 	pass # Replace with function body.
