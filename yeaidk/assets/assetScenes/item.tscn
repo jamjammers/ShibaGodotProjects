@@ -27,4 +27,5 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["item"]]
+scale = Vector2(1.5, 2)
 shape = SubResource("RectangleShape2D_vpy52")
