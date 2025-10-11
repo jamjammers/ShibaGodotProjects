@@ -109,12 +109,15 @@ func _on_contact_area_entered(area: Area2D) -> void:
 		hp -=1
 		timer = min(timer +0.25, 1.5)
 		var dir = area.global_position > global_position
+		sleeping = true
+		sleeping = false
 		if dir:
-			linear_velocity=(Vector2(-100, -50))
-			apply_central_force(Vector2(-500, -200) * 60)
+			
+			linear_velocity=(Vector2(-200, -100))
+			apply_central_force(Vector2(-500, -200) * 10)
 		else:
-			linear_velocity=(Vector2(100, -50))
-			apply_central_force(Vector2(500, -200) * 60)
+			linear_velocity=(Vector2(200, -100))
+			apply_central_force(Vector2(500, -200) * 10)
 		if (hp <= 0):
 			queue_free()
 	pass # Replace with function body.

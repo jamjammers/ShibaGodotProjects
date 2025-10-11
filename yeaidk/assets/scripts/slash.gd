@@ -13,7 +13,6 @@ func _draw() -> void:
 		draw_line(start_point, end_point, Color.RED if $col.disabled else Color.GREEN, 2)
 
 func slash():
-	print($col.disabled)
 	show()
 	$col.disabled = false
 	$slashTimer.start()
