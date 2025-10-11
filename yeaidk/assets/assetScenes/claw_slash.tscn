@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://coeqc7qdlukfr"]
+
+[ext_resource type="Script" uid="uid://bqak0xdsxf2xg" path="res://assets/scripts/slash.gd" id="1_tonu5"]
+[ext_resource type="SpriteFrames" uid="uid://cvbfynknk3i5o" path="res://assets/images/slash/slashFrames.tres" id="1_vkclc"]
+
+[node name="clawSlash" type="Area2D"]
+collision_layer = 32
+script = ExtResource("1_tonu5")
+
+[node name="slashSprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(60, 0)
+scale = Vector2(0.5, 0.2)
+sprite_frames = ExtResource("1_vkclc")
+animation = &"slash"
+frame_progress = 0.96436065
+
+[node name="col" type="CollisionPolygon2D" parent="."]
+position = Vector2(-9.000004, -2.0000026)
+build_mode = 1
+polygon = PackedVector2Array(0, 0, 4.000004, -57.999996, 28.000004, -56.999996, 68, -55.999996, 103, -51.999996, 138, -34.999996, 163, -9.999997, 157, 29.000002, 132, 42.000004, 92, 56.000004, 35.000004, 66, -10.999996, 65)
+
+[node name="slashTimer" type="Timer" parent="."]
+wait_time = 0.326
+one_shot = true
+
+[connection signal="timeout" from="slashTimer" to="." method="_timer_end"]

@@ -104,14 +104,17 @@ func _on_contact_body_shape_entered(body_rid: RID, body: Node2D, body_shape_inde
 
 
 func _on_contact_area_entered(area: Area2D) -> void:
-	if (area.name == "spear"):
+	if (area.collision_layer & 32 != 0):
+		print("hurt")
 		hp -=1
 		timer = min(timer +0.25, 1.5)
 		var dir = area.global_position > global_position
 		if dir:
-			linear_velocity=(Vector2(-500, -200))
+			linear_velocity=(Vector2(-100, -50))
+			apply_central_force(Vector2(-500, -200) * 60)
 		else:
-			linear_velocity=(Vector2(500, -200))
+			linear_velocity=(Vector2(100, -50))
+			apply_central_force(Vector2(500, -200) * 60)
 		if (hp <= 0):
 			queue_free()
 	pass # Replace with function body.

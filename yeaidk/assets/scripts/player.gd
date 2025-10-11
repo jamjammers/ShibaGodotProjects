@@ -191,8 +191,11 @@ func attack():
 	var mouse_pos = get_global_mouse_position()
 
 	var dir = (mouse_pos - global_position).normalized()
-	$spear.rotation = dir.angle()
-	$spear.stab()
+	$clawSlash.slash()
+	$clawSlash.scale.x = 1 if dir.x > 0 else -1
+
+	# $spear.rotation = dir.angle()
+	# $spear.stab()
 	pass
 
 
