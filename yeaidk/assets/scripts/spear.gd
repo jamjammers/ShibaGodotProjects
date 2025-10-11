@@ -23,8 +23,7 @@ func _process(delta: float) -> void:
 func stab() -> void:
 	show()
 	monitorable = true
-	$shaftCol.disabled = false
-	$pointCol.disabled = false
+	$col.disabled = false
 	$stabTimer.start()
 	state = "stabbing";
 
@@ -38,9 +37,8 @@ func off() -> void:
 	monitorable = false
 
 	state = "off"
-	$shaftCol.disabled = true
+	$col.disabled = true
 
-	$pointCol.disabled = true
 	position.x = 0
 	position.y = 0
 

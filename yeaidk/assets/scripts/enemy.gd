@@ -7,7 +7,18 @@ var stored_velocity: Vector2 = Vector2.ZERO
 
 var hp := 3
 
+var test = false
+
 func _physics_process(delta):
+	if Input.is_action_just_pressed("test"):
+		test = !test
+		if test:
+			linear_velocity = Vector2.ZERO
+
+	if freeze:
+		return
+	if test:
+		return
 	timer -= delta
 	queue_redraw()
 	attackProcess()

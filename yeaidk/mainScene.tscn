@@ -83,12 +83,11 @@ grow_vertical = 2
 texture = SubResource("ViewportTexture_2qqqv")
 script = SubResource("GDScript_bnlnp")
 
-[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
-z_index = 1
+[node name="frameBuffer" type="BackBufferCopy" parent="."]
 rect = Rect2(-100, -100, 10000, 10000)
 
 [node name="blurShader" type="ColorRect" parent="."]
-z_index = 2
+z_index = 1
 material = SubResource("ShaderMaterial_bnlnp")
 use_parent_material = true
 anchors_preset = 15
@@ -96,7 +95,21 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 1, 1, 0)
+color = Color(0, 0, 0, 1)
+
+[node name="blurBuffer" type="BackBufferCopy" parent="."]
+z_index = 1
+copy_mode = 2
+
+[node name="screenTint" type="ColorRect" parent="."]
+visible = false
+z_index = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
 
 [node name="HUD" parent="." instance=ExtResource("4_61od6")]
 

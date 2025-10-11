@@ -51,3 +51,14 @@ func getPortal(sceneName: String, direction: Portal.portalDirection) -> StageRef
 	if sceneData.has(sceneName) and sceneData[sceneName].has("portal"+str(direction)):
 		return sceneData[sceneName]["portal"+str(direction)]
 	return null
+
+
+enum Dir{
+	LEFT, UP, RIGHT, DOWN
+	
+}
+static func reverseDir(direction: Dir) -> Dir:
+	return ((direction + 2) % 4) as Dir	
+
+static func genDir(bodyX, otherX) -> Dir:
+	return (Dir.LEFT if bodyX > otherX else Dir.RIGHT)

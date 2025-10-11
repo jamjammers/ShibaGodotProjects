@@ -1,23 +1,37 @@
 extends RigidBody2D
 
+#### TODO: fix the weirdness of the portal system, add attack dir -> facing
+
+## Triggers when the player gets hurt (broadcasts total hp remaining)
+## currently it is connected to the UI to update the health display
 signal hurt(hp: int)
+
+## Triggers when the player enters a portal (broadcasts the direction and if it's a new stage)
+## currently connected to main_scene to handle stage changing
 signal portal(direction: Portal.portalDirection, new)
 
+## controls the player left right speed, acceleration, deceleration
+## also controls vertical speed for wall climbing (x2)
 @export var speed = 600.0
 @export var acceleration = 6000.0
 @export var friction = 6000.0
 
-
+## strength of the jump continuation (TODO: tune)
 var jumping := 0
 
+## places that the body touches the ground
 var groundContacts := []
 
+## if the player is touching a wall/can attach to a wall/is attached to a wall
 var wallTouch := false
-var wallAsim := false
+var wallTouchDir: Global.Dir
 var wallAsimable := false
+var wallAsim := false
 
+## hp (what did you expect)
 var hp := 5
 
+## when the player is frozen, store the velocity for after freeze
 var stored_velocity: Vector2 = Vector2.ZERO
 
 var abilities := {"dash": false, "double_jump": false, "wall_attach": false};
@@ -37,16 +51,15 @@ func _ready() -> void:
 	pass # Replace with function body.
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("test"):
-		test = !test
-		if test:
-			gravity_scale = 0
-			linear_velocity = Vector2.ZERO
-		else:
-			gravity_scale = 3
-
-	if test:
-		return
+	# if Input.is_action_just_pressed("test"):
+	# 	test = !test
+	# 	if test:
+	# 		gravity_scale = 0
+	# 		linear_velocity = Vector2.ZERO
+	# 	else:
+	# 		gravity_scale = 3
+	# if test:
+	# 	return
 	if freeze:
 		return
 
@@ -65,7 +78,7 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta):
 	if test:
-		testModeMovement()
+		testModeMovement(delta)
 		return
 	if freeze:
 		return
@@ -76,15 +89,15 @@ func _physics_process(delta):
 		jumpCont()
 
 # movement checks and executions
-func testModeMovement():
+func testModeMovement(delta):
 	if Input.is_action_pressed("moveLeft"):
-		position.x -= 100
+		position.x -= 500 * delta
 	if Input.is_action_pressed("moveRight"):
-		position.x += 100
+		position.x += 500 * delta
 	if Input.is_action_pressed("moveUp"):
-		position.y -= 100
+		position.y -= 500 * delta
 	if Input.is_action_pressed("moveDown"):
-		position.y += 100
+		position.y += 500 * delta
 func wallAttachCheck():
 	if !wallAsimable:
 		return
@@ -94,6 +107,10 @@ func wallAttachCheck():
 	if !abilities.wall_attach:
 		return
 	wallAsim = !wallAsim
+	if wallAsim:
+		facing = -1 if wallTouchDir == Global.Dir.RIGHT else 1
+		$render.scale.x = facing
+
 	linear_velocity.y = 0
 	gravity_scale = 0 if wallAsim else 3
 func itemPickup():
@@ -124,7 +141,7 @@ func wallJump():
 	if !abilities.wall_attach:
 		return
 	linear_velocity.y = -1000
-	var mult = -facing
+	var mult = - facing
 	linear_velocity.x = 700 * mult
 	doubleJumped = false;
 	jumping = -0
@@ -153,6 +170,9 @@ func horizMovement(delta):
 	if input_dir != 0:
 		# Accelerate toward target speed
 		facing = int(input_dir / abs(input_dir));
+		$render.scale.x = facing
+
+		
 		linear_velocity.x = move_toward(linear_velocity.x, input_dir * speed, acceleration * delta)
 	else:
 		# Friction when no input
@@ -161,7 +181,7 @@ func wallAsimMovement():
 	if !wallAsim:
 		return
 	var verticalAxis = Input.get_axis("moveUp", "moveDown")
-	linear_velocity.y = verticalAxis * speed*2
+	linear_velocity.y = verticalAxis * speed * 2
 	
 func attack():
 	if Input.is_action_just_pressed("attack") == false:
@@ -194,12 +214,12 @@ func enterFreeze(freezeState = true) -> void:
 
 func hit(fromRight: bool) -> void:
 	if fromRight:
-		linear_velocity=(Vector2(1200, -750))
+		linear_velocity = (Vector2(1200, -750))
 	else:
 		linear_velocity = Vector2(-1200, -750)
 	hp -= 1
 	hurt.emit(hp)
-	print("Incomplete: got hurt. "+str(hp)+" hp remains");
+	print("Incomplete: got hurt. " + str(hp) + " hp remains");
 
 func enterPortal(portalEntered: Portal) -> void:
 	portal.emit(portalEntered)
@@ -216,6 +236,7 @@ func _on_body_shape_entered(body_rid: RID, body: Node, body_shape_index: int, lo
 
 	elif (shape_owner.is_in_group("wallSide")):
 		wallTouch = true
+		wallTouchDir = Global.genDir(global_position.x, body.global_position.x)
 		var shape = shape_owner.shape
 		var y = 0
 		var x = 0
@@ -224,7 +245,7 @@ func _on_body_shape_entered(body_rid: RID, body: Node, body_shape_index: int, lo
 			var ext = shape.extents
 			y = ext.y * 2 * gtf.y.length()
 			x = ext.x * 2 * gtf.x.length()
-		if y > 75 or x >75:
+		if y > 75 or x > 75:
 			wallAsimable = true
 		else:
 			wallAsimable = false
@@ -237,15 +258,16 @@ func _on_body_shape_exited(body_rid: RID, body: Node, body_shape_index: int, loc
 
 	elif (shape_owner.is_in_group("wallSide")):
 		wallTouch = false
-		facing = int(linear_velocity.x / abs(linear_velocity.x)) if linear_velocity.x != 0 else 0
 		wallAsimable = false
 		if wallAsim:
 			wallAsim = false
 			linear_velocity.y = 0
-			gravity_scale = 0 if wallAsim else 3
+			gravity_scale = 3
 
-			apply_central_force(Vector2(0, -300)*60)
-			callAfterDelay(apply_central_force, 0.07,[Vector2(700 * facing, 0)*60])
+			apply_central_force(Vector2(700 * -facing, -300) * 60)
+			facing = -facing
+			$render.scale.x = facing
+
 
 func callAfterDelay(function: Callable, delay: float, args: Array = []) -> void:
 	var timer = Timer.new();
