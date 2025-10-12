@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://ccjmheubek61d" path="res://assets/scripts/player.gd" id="1_fksrs"]
 [ext_resource type="PackedScene" uid="uid://c4pi8242nxsjo" path="res://assets/assetScenes/color_capsule.tscn" id="2_rsc3f"]
-[ext_resource type="PackedScene" uid="uid://b61v28r3xthw3" path="res://assets/assetScenes/spear.tscn" id="3_6xwpp"]
-[ext_resource type="PackedScene" uid="uid://coeqc7qdlukfr" path="res://assets/assetScenes/claw_slash.tscn" id="3_dniid"]
+[ext_resource type="PackedScene" uid="uid://b61v28r3xthw3" path="res://assets/weapons/spear.tscn" id="3_6xwpp"]
+[ext_resource type="PackedScene" uid="uid://coeqc7qdlukfr" path="res://assets/weapons/claw_slash.tscn" id="3_dniid"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fksrs"]
 friction = 0.0
