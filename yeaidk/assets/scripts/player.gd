@@ -147,7 +147,7 @@ func wallJump():
 	if !abilities.wall_attach:
 		return
 	linear_velocity.y = -1000
-	var mult = - facing
+	var mult = 1 if wallTouchDir == Global.Dir.LEFT else -1
 	linear_velocity.x = 700 * mult
 	doubleJumped = false;
 	jumping = -0

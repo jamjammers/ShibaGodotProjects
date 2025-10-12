@@ -23,4 +23,7 @@ polygon = PackedVector2Array(0, 0, 4.000004, -57.999996, 28.000004, -56.999996, 
 wait_time = 0.326
 one_shot = true
 
+[node name="cooldown" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="timeout" from="slashTimer" to="." method="_timer_end"]

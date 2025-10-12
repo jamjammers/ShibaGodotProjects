@@ -19,7 +19,11 @@ func _process(delta):
 		return
 	if test:
 		return
-	timer -= delta
+	if (active):
+		print("active")
+		timer -= delta
+	elif(timer >0.25):
+		timer = max(timer - delta, 0.25)
 	queue_redraw()
 	attackProcess()
 
@@ -29,26 +33,25 @@ func _draw():
 		0, TAU, 64,
 		Color.GREEN if target != null else Color.RED,
 		2.0)
-	if (active):
+	if target != null:
 		draw_line(Vector2(0, 0), target.global_position - global_position, Color.GREEN if active else Color.RED, 2)
 
 func attackProcess():
 	active = false
 	if target == null:
 		return
-
 	var space_state = get_world_2d().direct_space_state
 	var query = PhysicsRayQueryParameters2D.create(global_position, target.global_position)
 	query.exclude = [self]
 	var result = space_state.intersect_ray(query)
 	if !result:
 		return
-	if (result.collider.name != "Player"):
+	if (result.collider.name != target.name):
 		return
+	active = true
 
 	if (timer > 0):
 		return
-	active = true
 	attack()
 	timer = 1
 
@@ -104,7 +107,6 @@ func _on_contact_body_shape_entered(body_rid: RID, body: Node2D, body_shape_inde
 
 
 func _on_contact_area_entered(area: Area2D) -> void:
-	print("hello")
 	if (area.collision_layer & 32 != 0):
 		print("hurt")
 		hp -=1

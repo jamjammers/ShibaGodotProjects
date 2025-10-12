@@ -5,6 +5,9 @@ var state := "off" # "off", "slashing"
 
 func _ready() -> void:
 	$col.disabled = true
+	var slashDuration = $slashSprite.sprite_frames.get_frame_count("slash") / $slashSprite.sprite_frames.get_animation_speed("slash")  
+	$slashTimer.wait_time = slashDuration
+	$cooldown.wait_time = slashDuration * 1.5
 	hide()
 
 func _draw() -> void:
@@ -16,6 +19,8 @@ func _draw() -> void:
 		draw_line(start_point, end_point, Color.RED if $col.disabled else Color.GREEN, 2)
 
 func slash():
+	if $cooldown.is_stopped() == false or state != "off":
+		return
 	state = "slashing"
 	show()
 	$col.disabled = false
@@ -32,3 +37,4 @@ func _timer_end():
 	$slashSprite.stop()
 	$slashSprite.frame = 0
 	queue_redraw()
+	$cooldown.start()
