@@ -224,8 +224,6 @@ func attack():
 		$render.scale.x = facing
 
 
-	pass
-
 func enterFreeze(freezeState = true) -> void:
 	freeze = freezeState
 	sleeping = freezeState

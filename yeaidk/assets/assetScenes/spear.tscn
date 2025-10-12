@@ -38,12 +38,16 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 color = Color(1, 0, 0, 1)
 
+[node name="col" type="CollisionPolygon2D" parent="."]
+build_mode = 1
+polygon = PackedVector2Array(0, -5, 102, -5, 104, -7, 111, 0, 104, 7, 102, 5, -102, 5, -102, -5, 0, -5)
+
 [node name="stabTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
 
-[node name="col" type="CollisionPolygon2D" parent="."]
-build_mode = 1
-polygon = PackedVector2Array(0, -5, 102, -5, 104, -7, 111, 0, 104, 7, 102, 5, -102, 5, -102, -5, 0, -5)
+[node name="cooldown" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
 
 [connection signal="timeout" from="stabTimer" to="." method="_on_stab_timer_timeout"]

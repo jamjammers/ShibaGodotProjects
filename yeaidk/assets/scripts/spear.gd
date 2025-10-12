@@ -22,7 +22,7 @@ func _process(delta: float) -> void:
 
 @warning_ignore("unused_parameter")
 func activate(dir) -> bool:
-	if state != "off":
+	if state != "off" or !$cooldown.is_stopped():
 		return false
 	rotation = dir.angle()
 
@@ -36,7 +36,6 @@ func activate(dir) -> bool:
 func retract() -> void:
 	$stabTimer.start()
 	state = "retracting";
-	pass
 
 func off() -> void:
 	hide()
@@ -47,6 +46,8 @@ func off() -> void:
 
 	position.x = 0
 	position.y = 0
+
+	$cooldown.start()
 
 
 func _on_stab_timer_timeout() -> void:
