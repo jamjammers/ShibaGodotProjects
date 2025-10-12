@@ -20,7 +20,6 @@ func _process(delta):
 	if test:
 		return
 	if (active):
-		print("active")
 		timer -= delta
 	elif(timer >0.25):
 		timer = max(timer - delta, 0.25)

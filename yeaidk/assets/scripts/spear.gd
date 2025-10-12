@@ -20,12 +20,18 @@ func _process(delta: float) -> void:
 		position.y -= speed * delta * sin(rotation)
 	pass # Replace with function body.
 
-func stab() -> void:
+@warning_ignore("unused_parameter")
+func activate(dir) -> bool:
+	if state != "off":
+		return false
+	rotation = dir.angle()
+
 	show()
 	monitorable = true
 	$col.disabled = false
 	$stabTimer.start()
 	state = "stabbing";
+	return true
 
 func retract() -> void:
 	$stabTimer.start()

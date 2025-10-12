@@ -18,15 +18,17 @@ func _draw() -> void:
 		
 		draw_line(start_point, end_point, Color.RED if $col.disabled else Color.GREEN, 2)
 
-func slash():
+func activate(dir)-> bool:
 	if $cooldown.is_stopped() == false or state != "off":
-		return
+		return false
+	scale.x = 1 if dir.x > 0 else -1
 	state = "slashing"
 	show()
 	$col.disabled = false
 	$slashTimer.start()
 	$slashSprite.play("slash", true)
 	queue_redraw()
+	return true
 
 
 

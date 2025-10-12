@@ -1,6 +1,8 @@
 extends RigidBody2D
 
-#### TODO: fix the weirdness of the portal system, add attack dir -> facing
+#### TODO: 
+#### fix the weirdness of the portal system, add attack dir -> facing
+#### add single class weapon inherit from?
 
 ## Triggers when the player gets hurt (broadcasts total hp remaining)
 ## currently it is connected to the UI to update the health display
@@ -16,11 +18,19 @@ signal portal(direction: Portal.portalDirection, new)
 @export var acceleration = 6000.0
 @export var friction = 6000.0
 
-## strength of the jump continuation (TODO: tune)
-var jumping := 0
+## which direction the player is facing, 1 is right, -1 is left
+var facing: int;
 
 ## places that the body touches the ground
 var groundContacts := []
+
+## strength of the jump continuation (TODO: tune)
+var jumping := 0
+var doubleJumped := false # can only double once per groundTouching
+
+## if you dashed LOL
+var dashed := false # can only dash once per groundTouching state
+
 
 ## if the player is touching a wall/can attach to a wall/is attached to a wall
 var wallTouch := false
@@ -35,13 +45,15 @@ var invincibility := 0.0;
 ## when the player is frozen, store the velocity for after freeze
 var stored_velocity: Vector2 = Vector2.ZERO
 
+##abilities, what more do you need to know?
 var abilities := {"dash": false, "double_jump": false, "wall_attach": false};
-var dashed := false # can only dash once per groundTouching state
-var doubleJumped := false # can only double once per groundTouching
-var facing: int;
-
 var itemsTouching := []
 
+##wepon
+var weapons:Array[Node] = []
+var currentWeaponIdx:int = 0
+
+##super funny debug mode
 var test = false;
 
 func _ready() -> void:
@@ -49,7 +61,9 @@ func _ready() -> void:
 	facing = 1
 	$dashTimer.wait_time = 0.5
 	get_viewport().handle_input_locally = true
+	weapons = [$clawSlash, $spear]
 	pass # Replace with function body.
+
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("test"):
@@ -71,6 +85,7 @@ func _process(delta: float) -> void:
 			$render.modulate = Color(1, 1, 1, 0.5 + 0.5 * sin(invincibility * 20))
 	wallAttachCheck()
 	itemPickup()
+	switchWeapons()
 
 	if (wallTouch and not groundContacts.size()) or wallAsim:
 		wallJump()
@@ -189,22 +204,26 @@ func wallAsimMovement():
 		return
 	var verticalAxis = Input.get_axis("moveUp", "moveDown")
 	linear_velocity.y = verticalAxis * speed * 2
-	
+
+# weaponing
+func switchWeapons():
+	if Input.is_action_just_pressed("switchWeapon"):
+		currentWeaponIdx = (currentWeaponIdx + 1) % weapons.size()
+		#something something display in some UI or idk
 func attack():
 	if Input.is_action_just_pressed("attack") == false:
 		return
-	if !($spear/stabTimer.is_stopped()):
-		return
+	
 	var mouse_pos = get_global_mouse_position()
 
 	var dir = (mouse_pos - global_position).normalized()
 	facing = 1 if dir.x > 0 else -1
-	$render.scale.x = facing
-	$clawSlash.slash()
-	$clawSlash.scale.x = 1 if dir.x > 0 else -1
 
-	# $spear.rotation = dir.angle()
-	# $spear.stab()
+	var weapon = weapons[currentWeaponIdx]
+	if(weapon.activate(dir)):
+		$render.scale.x = facing
+
+
 	pass
 
 func enterFreeze(freezeState = true) -> void:
