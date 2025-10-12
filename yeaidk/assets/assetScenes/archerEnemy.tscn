@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://ek65qrqh70wq"]
+[gd_scene load_steps=5 format=3 uid="uid://ek65qrqh70wq"]
 
-[ext_resource type="Script" path="res://assets/scripts/archer.gd" id="1_4x38i"]
+[ext_resource type="Script" uid="uid://cvctcppy1uca7" path="res://assets/scripts/archer.gd" id="1_4x38i"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mm6rw"]
 radius = 300.0
@@ -8,7 +8,11 @@ radius = 300.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mm6rw"]
 size = Vector2(40, 40)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4x38i"]
+size = Vector2(40, 40)
+
 [node name="archer" type="RigidBody2D"]
+collision_layer = 8
 script = ExtResource("1_4x38i")
 
 [node name="detectionArea" type="Area2D" parent="."]
@@ -27,3 +31,15 @@ color = Color(0.88547456, 0.32966295, 0, 1)
 
 [node name="physicalCol" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_mm6rw")
+
+[node name="contact" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 35
+
+[node name="ContactCol" type="CollisionShape2D" parent="contact" groups=["enemies"]]
+shape = SubResource("RectangleShape2D_4x38i")
+
+[connection signal="body_entered" from="detectionArea" to="." method="_on_detection_body_entered"]
+[connection signal="body_exited" from="detectionArea" to="." method="_on_detection_body_exited"]
+[connection signal="area_entered" from="contact" to="." method="_on_contact_area_entered"]
+[connection signal="body_shape_entered" from="contact" to="." method="_on_contact_body_shape_entered"]

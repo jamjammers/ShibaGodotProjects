@@ -30,7 +30,7 @@ one_shot = true
 
 [node name="triggerCol" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 64
+collision_mask = 72
 
 [node name="Collider" type="CollisionShape2D" parent="triggerCol"]
 shape = SubResource("RectangleShape2D_rsc3f")

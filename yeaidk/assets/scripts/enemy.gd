@@ -7,16 +7,18 @@ var target: Node2D = null;
 
 ## attack spd timers
 var timer: float = 0.0;
-var maxTimer: float = 1.0;
+@export var maxTimer: float = 1.0;
 
 ## this is only if you contact damage want
-var contactDamage := true
+@export var contactDamage := true
 
 var stored_velocity: Vector2 = Vector2.ZERO
 
 var hp := 3
 
 var test = false
+
+
 
 func _process(delta):
 	if Input.is_action_just_pressed("test"):
@@ -100,7 +102,8 @@ func _on_contact_body_shape_entered(body_rid: RID, body: Node2D, body_shape_inde
 		body.hit(body.global_position > global_position)
 	
 	elif(shape_owner.is_in_group("groundTop") and shape_owner.position.y < position.y):
-		physics_material_override.friction = 1
+		# physics_material_override.friction = 1
+		pass
 	pass # Replace with function body.
 
 

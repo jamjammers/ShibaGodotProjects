@@ -3,6 +3,7 @@ extends RigidBody2D
 #### TODO: 
 #### fix the weirdness of the portal system, add attack dir -> facing
 #### add single class weapon inherit from?
+#### make enemy col work here? idk
 
 ## Triggers when the player gets hurt (broadcasts total hp remaining)
 ## currently it is connected to the UI to update the health display
@@ -317,6 +318,10 @@ func _on_trigger_col_area_entered(area: Area2D) -> void:
 		# inventory add item here
 		if area.type == Item.ItemType.ABILITY:
 			abilities[area.ability] = true
+	
+	if area.name == "enemyArrow":
+		hit(area.global_position.x > global_position.x)
+
 	pass # Replace with function body.
 
 func _on_trigger_col_area_exited(area: Area2D) -> void:

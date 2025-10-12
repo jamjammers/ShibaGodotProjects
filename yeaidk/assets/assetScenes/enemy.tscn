@@ -49,5 +49,4 @@ shape = SubResource("RectangleShape2D_vbccy")
 [connection signal="body_entered" from="detectionArea" to="." method="_on_detection_body_entered"]
 [connection signal="body_exited" from="detectionArea" to="." method="_on_detection_body_exited"]
 [connection signal="area_entered" from="contact" to="." method="_on_contact_area_entered"]
-[connection signal="body_entered" from="contact" to="." method="_on_contact_body_entered"]
 [connection signal="body_shape_entered" from="contact" to="." method="_on_contact_body_shape_entered"]
