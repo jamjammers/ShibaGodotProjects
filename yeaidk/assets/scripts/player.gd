@@ -175,7 +175,8 @@ func horizMovement(delta):
 	var input_dir = Input.get_axis("moveLeft", "moveRight")
 	if input_dir != 0:
 		# Accelerate toward target speed
-		facing = int(input_dir / abs(input_dir));
+		if $clawSlash.state == "off":
+			facing = int(input_dir / abs(input_dir));
 		$render.scale.x = facing
 
 		
@@ -197,6 +198,7 @@ func attack():
 	var mouse_pos = get_global_mouse_position()
 
 	var dir = (mouse_pos - global_position).normalized()
+	facing = 1 if dir.x > 0 else -1
 	$clawSlash.slash()
 	$clawSlash.scale.x = 1 if dir.x > 0 else -1
 

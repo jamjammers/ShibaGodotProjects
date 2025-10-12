@@ -1,5 +1,8 @@
 extends Area2D
 
+
+var state := "off" # "off", "slashing"
+
 func _ready() -> void:
 	$col.disabled = true
 	hide()
@@ -13,6 +16,7 @@ func _draw() -> void:
 		draw_line(start_point, end_point, Color.RED if $col.disabled else Color.GREEN, 2)
 
 func slash():
+	state = "slashing"
 	show()
 	$col.disabled = false
 	$slashTimer.start()
@@ -22,6 +26,7 @@ func slash():
 
 
 func _timer_end():
+	state = "off"
 	hide()
 	$col.disabled = true
 	$slashSprite.stop()
