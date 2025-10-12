@@ -199,6 +199,7 @@ func attack():
 
 	var dir = (mouse_pos - global_position).normalized()
 	facing = 1 if dir.x > 0 else -1
+	$render.scale.x = facing
 	$clawSlash.slash()
 	$clawSlash.scale.x = 1 if dir.x > 0 else -1
 
