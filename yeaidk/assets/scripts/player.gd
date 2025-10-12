@@ -30,6 +30,7 @@ var wallAsim := false
 
 ## hp (what did you expect)
 var hp := 5
+var invincibility := 0.0;
 
 ## when the player is frozen, store the velocity for after freeze
 var stored_velocity: Vector2 = Vector2.ZERO
@@ -51,18 +52,23 @@ func _ready() -> void:
 	pass # Replace with function body.
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
-	# if Input.is_action_just_pressed("test"):
-	# 	test = !test
-	# 	if test:
-	# 		gravity_scale = 0
-	# 		linear_velocity = Vector2.ZERO
-	# 	else:
-	# 		gravity_scale = 3
-	# if test:
-	# 	return
+	if Input.is_action_just_pressed("test"):
+		test = !test
+		if test:
+			gravity_scale = 0
+			linear_velocity = Vector2.ZERO
+		else:
+			gravity_scale = 3
+	if test:
+		return
 	if freeze:
 		return
-
+	if invincibility > 0.0:
+		invincibility = max(invincibility - delta, 0.0)
+		if invincibility == 0.0:
+			$render.modulate = Color(1, 1, 1, 1)
+		else:
+			$render.modulate = Color(1, 1, 1, 0.5 + 0.5 * sin(invincibility * 20))
 	wallAttachCheck()
 	itemPickup()
 
@@ -198,7 +204,6 @@ func attack():
 	# $spear.stab()
 	pass
 
-
 func enterFreeze(freezeState = true) -> void:
 	freeze = freezeState
 	sleeping = freezeState
@@ -216,12 +221,15 @@ func enterFreeze(freezeState = true) -> void:
 	# gravity_scale = 0
 
 func hit(fromRight: bool) -> void:
+	if invincibility > 0.0:
+		return
 	if fromRight:
 		linear_velocity = (Vector2(1200, -750))
 	else:
 		linear_velocity = Vector2(-1200, -750)
 	hp -= 1
 	hurt.emit(hp)
+	invincibility = 1.0;
 	print("Incomplete: got hurt. " + str(hp) + " hp remains");
 
 func enterPortal(portalEntered: Portal) -> void:

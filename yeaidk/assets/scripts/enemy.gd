@@ -9,7 +9,7 @@ var hp := 3
 
 var test = false
 
-func _physics_process(delta):
+func _process(delta):
 	if Input.is_action_just_pressed("test"):
 		test = !test
 		if test:
@@ -104,6 +104,7 @@ func _on_contact_body_shape_entered(body_rid: RID, body: Node2D, body_shape_inde
 
 
 func _on_contact_area_entered(area: Area2D) -> void:
+	print("hello")
 	if (area.collision_layer & 32 != 0):
 		print("hurt")
 		hp -=1
