@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cnwhh4200sqym" path="res://assets/scripts/enemyArcher.gd" id="2_soo7k"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_soo7k"]
-radius = 200.0
+radius = 600.0
 
 [node name="archerEnemy" instance=ExtResource("1_ghx1j")]
 script = ExtResource("2_soo7k")

@@ -1,4 +1,4 @@
-extends Enemy
+extends BaseEnemy
 
 
 func attack():

@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bndil7bonrxn7"]
 
-[ext_resource type="Script" uid="uid://cctdjmtraamx5" path="res://assets/scripts/enemy.gd" id="1_sgmmb"]
+[ext_resource type="Script" uid="uid://cb4jucftgxbe2" path="res://assets/scripts/base_enemy.gd" id="1_sgmmb"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_sgmmb"]
 
