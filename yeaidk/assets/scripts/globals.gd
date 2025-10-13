@@ -53,6 +53,19 @@ func getPortal(sceneName: String, direction: Portal.portalDirection) -> StageRef
 	return null
 
 
+
+func callAfterDelay(function: Callable, delay: float, args: Array = []) -> void:
+	var timer = Timer.new();
+	timer.one_shot = true
+	timer.wait_time = delay
+	add_child(timer)
+	timer.start()
+	timer.timeout.connect(func() -> void:
+		function.callv(args)
+		timer.queue_free()
+		)
+
+
 enum Dir{
 	LEFT, UP, RIGHT, DOWN
 	

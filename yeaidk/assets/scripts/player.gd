@@ -301,18 +301,6 @@ func _on_body_shape_exited(body_rid: RID, body: Node, body_shape_index: int, loc
 			facing = -facing
 			$render.scale.x = facing
 
-
-func callAfterDelay(function: Callable, delay: float, args: Array = []) -> void:
-	var timer = Timer.new();
-	timer.one_shot = true
-	timer.wait_time = delay
-	add_child(timer)
-	timer.start()
-	timer.timeout.connect(func() -> void:
-		function.callv(args)
-		timer.queue_free()
-		)
-
 func _on_trigger_col_area_entered(area: Area2D) -> void:
 	if area.is_in_group("item"):
 		itemsTouching.append(area)
