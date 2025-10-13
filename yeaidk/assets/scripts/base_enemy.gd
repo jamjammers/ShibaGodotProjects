@@ -51,7 +51,12 @@ func _draw():
 		Color.GREEN if target != null else Color.RED,
 		2.0)
 	if target != null:
-		draw_line(Vector2(0, 0), target.global_position - global_position, Color.GREEN if active else Color.RED, 2)
+		var colSize:Vector2 = ($physicalCol.shape as RectangleShape2D).size
+		var offset = Vector2(colSize.x/2-1, colSize.y/2-1)
+		draw_line(offset, target.global_position - global_position, Color.GREEN if raycast(offset) else Color.RED, 2)
+		draw_line(-offset, target.global_position - global_position, Color.GREEN if raycast(-offset) else Color.RED, 2)
+		draw_line(Vector2(offset.x, -offset.y), target.global_position - global_position, Color.GREEN if raycast(Vector2(offset.x, -offset.y)) else Color.RED, 2)
+		draw_line(Vector2(-offset.x, -offset.y), target.global_position - global_position, Color.GREEN if raycast(Vector2(-offset.x, -offset.y)) else Color.RED, 2)
 
 func attackProcess():
 	active = false
@@ -60,10 +65,12 @@ func attackProcess():
 	# check Line of sight
 	var colSize:Vector2 = ($physicalCol.shape as RectangleShape2D).size
 	
-	if not(attackRayCast(Vector2(colSize.x/2-1, colSize.y/2-1)) or 
-		   attackRayCast(Vector2(-colSize.x/2+1, colSize.y/2-1)) or 
-		   attackRayCast(Vector2(colSize.x/2, -colSize.y/2)) or 
-		   attackRayCast(Vector2(-colSize.x/2, -colSize.y/2))):
+	if not(
+		raycast(Vector2(colSize.x/2-1, colSize.y/2-1)) or 
+		raycast(Vector2(-colSize.x/2+1, colSize.y/2-1)) or 
+		raycast(Vector2(colSize.x/2-1, -colSize.y/2+1)) or 
+		raycast(Vector2(-colSize.x/2+1, -colSize.y/2+1))
+	):
 		return
 	active = true
 
@@ -72,34 +79,19 @@ func attackProcess():
 	attack()
 	timer = maxTimer
 
-func attackRayCast(offset: Vector2) -> bool:
+func raycast(offset: Vector2) -> bool:
 	var space_state = get_world_2d().direct_space_state
-	var q1 = PhysicsRayQueryParameters2D.create(global_position+offset, target.global_position)
-	var q2 = PhysicsRayQueryParameters2D.create(global_position-offset, target.global_position)
-	var q3 = PhysicsRayQueryParameters2D.create(global_position+Vector2(offset.x, -offset.y), target.global_position)
-	var q4 = PhysicsRayQueryParameters2D.create(global_position-Vector2(offset.x, -offset.y), target.global_position)
+	var query = PhysicsRayQueryParameters2D.create(global_position+offset, target.global_position)
 	
 	var layers = 1+2+pow(2,5)
 
-	q1.collision_mask = layers
-	q2.collision_mask = layers
-	q3.collision_mask = layers
-	q4.collision_mask = layers
+	query.collision_mask = layers
 
-	var r1 = space_state.intersect_ray(q1)
-	var r2 = space_state.intersect_ray(q2)
-	var r3 = space_state.intersect_ray(q3)
-	var r4 = space_state.intersect_ray(q4)
+	var result = space_state.intersect_ray(query)
 
-	print("Raycast results: ", r1.is_empty(), r2.is_empty(), r3.is_empty(), r4.is_empty())
-	if !(r1 or r2 or r3 or r4):
+	if !(result):
 		return false
-	if (
-			(!r1.is_empty() and r1.collider.name != target.name) or 
-			(!r2.is_empty() and r2.collider.name != target.name) or 
-			(!r3.is_empty() and r3.collider.name != target.name) or 
-			(!r4.is_empty() and r4.collider.name != target.name)
-		):
+	if (!result.is_empty() and result.collider.name != target.name):
 		return false
 	return true
 
@@ -147,6 +139,17 @@ func _on_contact_body_shape_entered(body_rid: RID, body: Node2D, body_shape_inde
 
 func _on_contact_area_entered(area: Area2D) -> void:
 	if (area.collision_layer & 32 != 0):
+		if area.name == "spear":
+			var colSize:Vector2 = ($physicalCol.shape as RectangleShape2D).size
+			if not(
+				raycast(Vector2(colSize.x/2-1, colSize.y/2-1)) or 
+				raycast(Vector2(-colSize.x/2+1, colSize.y/2-1)) or 
+				raycast(Vector2(colSize.x/2-1, -colSize.y/2+1)) or 
+				raycast(Vector2(-colSize.x/2+1, -colSize.y/2+1))
+			):
+				return
+
+
 		hp -=1
 		timer = min(timer +0.25, 1.5)
 		var dir = area.global_position > global_position
