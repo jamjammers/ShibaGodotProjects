@@ -3,7 +3,6 @@ func _ready() -> void:
 	super._ready()
 	maxTimer = 2.0
 	contactDamage = false
-	gravity_scale = 0
 	
 
 func attack():

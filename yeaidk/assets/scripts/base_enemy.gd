@@ -60,8 +60,8 @@ func attackProcess():
 	# check Line of sight
 	var colSize:Vector2 = ($physicalCol.shape as RectangleShape2D).size
 	
-	if not(attackRayCast(Vector2(colSize.x/2, colSize.y/2)) or 
-		   attackRayCast(Vector2(-colSize.x/2, colSize.y/2)) or 
+	if not(attackRayCast(Vector2(colSize.x/2-1, colSize.y/2-1)) or 
+		   attackRayCast(Vector2(-colSize.x/2+1, colSize.y/2-1)) or 
 		   attackRayCast(Vector2(colSize.x/2, -colSize.y/2)) or 
 		   attackRayCast(Vector2(-colSize.x/2, -colSize.y/2))):
 		return
@@ -74,12 +74,32 @@ func attackProcess():
 
 func attackRayCast(offset: Vector2) -> bool:
 	var space_state = get_world_2d().direct_space_state
-	var query = PhysicsRayQueryParameters2D.create(global_position+offset, target.global_position)
-	query.exclude = [self]
-	var result = space_state.intersect_ray(query)
-	if !result:
+	var q1 = PhysicsRayQueryParameters2D.create(global_position+offset, target.global_position)
+	var q2 = PhysicsRayQueryParameters2D.create(global_position-offset, target.global_position)
+	var q3 = PhysicsRayQueryParameters2D.create(global_position+Vector2(offset.x, -offset.y), target.global_position)
+	var q4 = PhysicsRayQueryParameters2D.create(global_position-Vector2(offset.x, -offset.y), target.global_position)
+	
+	var layers = 1+2+pow(2,5)
+
+	q1.collision_mask = layers
+	q2.collision_mask = layers
+	q3.collision_mask = layers
+	q4.collision_mask = layers
+
+	var r1 = space_state.intersect_ray(q1)
+	var r2 = space_state.intersect_ray(q2)
+	var r3 = space_state.intersect_ray(q3)
+	var r4 = space_state.intersect_ray(q4)
+
+	print("Raycast results: ", r1.is_empty(), r2.is_empty(), r3.is_empty(), r4.is_empty())
+	if !(r1 or r2 or r3 or r4):
 		return false
-	if (result.collider.name != target.name):
+	if (
+			(!r1.is_empty() and r1.collider.name != target.name) or 
+			(!r2.is_empty() and r2.collider.name != target.name) or 
+			(!r3.is_empty() and r3.collider.name != target.name) or 
+			(!r4.is_empty() and r4.collider.name != target.name)
+		):
 		return false
 	return true
 
