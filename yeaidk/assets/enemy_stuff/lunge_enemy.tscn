@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://dddypovf2ijm"]
+
+[ext_resource type="PackedScene" uid="uid://bndil7bonrxn7" path="res://assets/enemy_stuff/base_enemy.tscn" id="1_2xgbu"]
+[ext_resource type="Script" uid="uid://bvpbk0ylunc5f" path="res://assets/scripts/enemyLunger.gd" id="2_rp15g"]
+
+[node name="lungeEnemy" instance=ExtResource("1_2xgbu")]
+script = ExtResource("2_rp15g")

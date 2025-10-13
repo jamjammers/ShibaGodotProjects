@@ -1,10 +1,5 @@
-extends "res://assets/scripts/enemy.gd"
+extends Enemy
 
-func _draw():
-	super._draw()
-
-	if target != null:
-		draw_line(Vector2(0, 0), target.global_position - global_position, Color.GREEN if active else Color.RED, 2)
 
 func attack():
 	physics_material_override.friction = 0

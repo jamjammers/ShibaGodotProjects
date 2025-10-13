@@ -1,10 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://bnvv8lyv8pg83"]
+[gd_scene load_steps=3 format=3 uid="uid://bnvv8lyv8pg83"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_uomln"]
+friction = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0mvnp"]
 size = Vector2(40, 40)
 
 [node name="enemyArrow" type="RigidBody2D"]
 collision_layer = 8
+physics_material_override = SubResource("PhysicsMaterial_uomln")
 gravity_scale = 0.0
 
 [node name="ColorRect" type="ColorRect" parent="."]

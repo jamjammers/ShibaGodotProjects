@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://h4o2pponxlga"]
+
+[ext_resource type="PackedScene" uid="uid://bndil7bonrxn7" path="res://assets/enemy_stuff/base_enemy.tscn" id="1_ghx1j"]
+[ext_resource type="Script" uid="uid://cnwhh4200sqym" path="res://assets/scripts/enemyArcher.gd" id="2_soo7k"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_soo7k"]
+radius = 200.0
+
+[node name="archerEnemy" instance=ExtResource("1_ghx1j")]
+script = ExtResource("2_soo7k")
+
+[node name="ColorRect" parent="." index="0"]
+color = Color(0.83940744, 0.38246873, 5.7756904e-07, 1)
+
+[node name="triggerCircle" parent="detectionArea" index="0"]
+shape = SubResource("CircleShape2D_soo7k")

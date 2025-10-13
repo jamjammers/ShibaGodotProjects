@@ -14,7 +14,7 @@
 - Archer Enemy
 - fix the weirdness of the portal system (goes together with making a map)
   - basically, the portals do link, but if there are 2 adjacent ones (that would connect via portal or one would block the other), they don't interact
-- 
+- janky spear col
 
 # Questions to ask people
 - file structure
