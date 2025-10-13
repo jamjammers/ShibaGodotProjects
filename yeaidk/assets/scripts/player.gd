@@ -268,6 +268,7 @@ func _on_body_shape_entered(body_rid: RID, body: Node, body_shape_index: int, lo
 
 	elif (shape_owner.is_in_group("wallSide")):
 		wallTouch = true
+		
 		wallTouchDir = Global.genDir(global_position.x, body.global_position.x)
 		var shape = shape_owner.shape
 		var y = 0

@@ -82,7 +82,7 @@ func enterFreeze(freezeState:bool) -> void:
 		gravity_scale = 1
 
 func _on_detection_body_entered(body: Node2D) -> void:
-	if body.name == "Player": # maybe change later?
+	if body.name == "Player":
 		active = true
 		target = body;
 		
