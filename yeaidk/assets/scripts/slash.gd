@@ -5,7 +5,7 @@ var state := "off" # "off", "slashing"
 
 func _ready() -> void:
 	$col.disabled = true
-	var slashDuration = $slashSprite.sprite_frames.get_frame_count("slash") / $slashSprite.sprite_frames.get_animation_speed("slash")  
+	var slashDuration = ($slashSprite.sprite_frames.get_frame_count("slash")-1) / $slashSprite.sprite_frames.get_animation_speed("slash")  
 	$slashTimer.wait_time = slashDuration
 	$cooldown.wait_time = slashDuration * 1.5
 	hide()

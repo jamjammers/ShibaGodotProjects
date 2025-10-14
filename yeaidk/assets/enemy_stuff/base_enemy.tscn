@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://bndil7bonrxn7"]
+[gd_scene load_steps=6 format=3 uid="uid://bndil7bonrxn7"]
 
 [ext_resource type="Script" uid="uid://cb4jucftgxbe2" path="res://assets/scripts/base_enemy.gd" id="1_sgmmb"]
-[ext_resource type="Material" uid="uid://ccdiqy5740hx2" path="res://assets/textures/dedparticleeffect.tres" id="2_isqm2"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_sgmmb"]
 friction = 0.0
@@ -14,8 +13,6 @@ radius = 300.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_isqm2"]
 size = Vector2(40, 40)
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_sgmmb"]
 
 [node name="baseEnemy" type="RigidBody2D"]
 collision_layer = 8
@@ -51,11 +48,3 @@ collision_mask = 35
 
 [node name="ContactCol" type="CollisionShape2D" parent="contact" groups=["enemies"]]
 shape = SubResource("RectangleShape2D_isqm2")
-
-[node name="hitParticles" type="GPUParticles2D" parent="."]
-amount = 30
-sub_emitter = NodePath(".")
-texture = SubResource("PlaceholderTexture2D_sgmmb")
-explosiveness = 1.0
-trail_lifetime = 0.2
-process_material = ExtResource("2_isqm2")

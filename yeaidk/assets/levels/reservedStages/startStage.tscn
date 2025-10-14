@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dep25nrtxqtas"]
+[gd_scene load_steps=6 format=3 uid="uid://dep25nrtxqtas"]
 
 [ext_resource type="PackedScene" uid="uid://cbr6hcqvt3jkm" path="res://assets/assetScenes/portal.tscn" id="1_kgca3"]
 [ext_resource type="PackedScene" uid="uid://b5og601fwewkl" path="res://assets/assetScenes/platform.tscn" id="2_pyq0k"]
 [ext_resource type="PackedScene" uid="uid://blcu3h2weektv" path="res://assets/assetScenes/item.tscn" id="4_3a6cf"]
 [ext_resource type="PackedScene" uid="uid://bndil7bonrxn7" path="res://assets/enemy_stuff/base_enemy.tscn" id="4_w2piy"]
+[ext_resource type="PackedScene" uid="uid://h4o2pponxlga" path="res://assets/enemy_stuff/archer_enemy.tscn" id="5_w2piy"]
 
 [node name="startStage" type="Node2D" groups=["stage"]]
 
@@ -51,3 +52,6 @@ ability = "wall_attach"
 [node name="baseEnemy" parent="." instance=ExtResource("4_w2piy")]
 position = Vector2(785, 865)
 hp = 1000
+
+[node name="archerEnemy" parent="." instance=ExtResource("5_w2piy")]
+position = Vector2(753, 633)
