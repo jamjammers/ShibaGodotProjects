@@ -164,12 +164,11 @@ func _on_contact_area_entered(area: Area2D) -> void:
 	
 func emitParticles():
 	var emitter = GPUParticles2D.new()
-	# emitter.texture = PlaceholderTexture2D.new()
+	emitter.texture = PlaceholderTexture2D.new()
 	emitter.lifetime = 1.0
 	emitter.one_shot = true
 	emitter.amount = 30
 	emitter.emitting = true
-	emitter.global_position = global_position
 	emitter.explosiveness = 1.0
 	emitter.process_material = load("res://assets/textures/dedparticleeffect.tres")
 	add_child(emitter)
