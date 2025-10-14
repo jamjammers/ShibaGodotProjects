@@ -2,7 +2,7 @@ extends Area2D
 
 
 var state := "off" # "off", "slashing"
-
+var direction: Global.Dir
 func _ready() -> void:
 	$col.disabled = true
 	var slashDuration = ($slashSprite.sprite_frames.get_frame_count("slash")-1) / $slashSprite.sprite_frames.get_animation_speed("slash")  
@@ -25,10 +25,24 @@ func activate(dir)-> bool:
 	if abs(dir.x) < abs(dir.y):
 		if scale.x * dir.y > 0:
 			rotation_degrees = 90
+
 		else:
 			rotation_degrees = -90
+		if dir.y >0:
+			direction = Global.Dir.DOWN
+		else:
+			direction = Global.Dir.UP
+
+
+
 	else:
+		if scale.x >0:
+			direction = Global.Dir.RIGHT
+		else:
+			direction = Global.Dir.LEFT
+
 		rotation_degrees = 0
+	print("Slash dir: ", direction)
 
 	state = "slashing"
 	show()

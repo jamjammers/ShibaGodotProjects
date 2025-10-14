@@ -148,14 +148,24 @@ func _on_contact_area_entered(area: Area2D) -> void:
 				raycast(Vector2(-colSize.x/2+1, -colSize.y/2+1))
 			):
 				return
-
+		var yDir = 1;
+		if area.name == "clawSlash" and area.direction == Global.Dir.UP:
+			yDir = -1
+		elif area.name == "clawSlash" and area.direction == Global.Dir.DOWN:
+			yDir = 1
+			
 
 		hp -=1
 		timer = min(timer +0.25, 1.5)
 		var dir = -1 if area.global_position > global_position else 1
 		sleeping = true
 		sleeping = false
-		linear_velocity=(Vector2(dir * 500, -500)*(area.knockback if area.has_meta("knockback") else 1))
+		linear_velocity=(Vector2(dir * 500, -500* yDir)*(area.knockback if area.has_meta("knockback") else 1))
+
+		
+		var parent = area.get_parent() as RigidBody2D
+		parent.linear_velocity.y /= 3
+		parent.apply_central_impulse(Vector2(0, -1000))
 		emitParticles()
 		print("Enemy hit, %s hp remains"%hp+ str(get_child_count()))
 		if (hp <= 0):
