@@ -48,8 +48,6 @@ collision_mask = 35
 
 [node name="ContactCol" type="CollisionShape2D" parent="contact" groups=["enemies"]]
 shape = SubResource("RectangleShape2D_isqm2")
-<<<<<<< Updated upstream
-=======
 
 [node name="hitParticles" type="GPUParticles2D" parent="."]
 visible = false
@@ -59,4 +57,3 @@ texture = SubResource("PlaceholderTexture2D_sgmmb")
 explosiveness = 1.0
 trail_lifetime = 0.2
 process_material = ExtResource("2_isqm2")
->>>>>>> Stashed changes
