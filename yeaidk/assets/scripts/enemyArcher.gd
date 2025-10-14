@@ -22,8 +22,6 @@ func attack():
 	var angle = -atan((pow(m,2)-sqrt(pow(m,4)-2*pow(g,2)*pow(m,2)*y-pow(g,4)*pow(x,2)))/(pow(g,2)*x))
 	if(x < 0):
 		angle += PI
-	print("Angle: ", rad_to_deg(angle))
-	print("Player Angle: ", rad_to_deg(relative_pos.angle()))
 	var vector = Vector2(cos(angle), sin(angle))
 	arrow.launch(vector)
 	

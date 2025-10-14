@@ -14,13 +14,13 @@ var timer: float = 0.0;
 
 var stored_velocity: Vector2 = Vector2.ZERO
 
-var hp := 3
+@export var hp := 3
 
 var test = false
 
 
 func _ready() -> void:
-	print("Debug: %s enemy is ready"%name)
+	# print("Debug: %s enemy is ready"%name)
 	$detectionArea.connect("body_entered", Callable(self, "_on_detection_body_entered"))
 	$detectionArea.connect("body_exited", Callable(self, "_on_detection_body_exited"))
 	$contact.connect("body_shape_entered", Callable(self, "_on_contact_body_shape_entered"))
@@ -133,7 +133,7 @@ func _on_contact_body_shape_entered(body_rid: RID, body: Node2D, body_shape_inde
 		body.hit(body.global_position > global_position)
 	
 	elif(shape_owner.is_in_group("groundTop") and shape_owner.position.y < position.y):
-		physics_material_override.friction = 1
+		linear_velocity = Vector2.ZERO
 		pass
 	pass # Replace with function body.
 
@@ -152,16 +152,34 @@ func _on_contact_area_entered(area: Area2D) -> void:
 
 		hp -=1
 		timer = min(timer +0.25, 1.5)
-		var dir = area.global_position > global_position
+		var dir = -1 if area.global_position > global_position else 1
 		sleeping = true
 		sleeping = false
-		if dir:
-			
-			linear_velocity=(Vector2(-200, -100))
-			apply_central_force(Vector2(-500, -200) * 10)
-		else:
-			linear_velocity=(Vector2(200, -100))
-			apply_central_force(Vector2(500, -200) * 10)
+		linear_velocity=(Vector2(dir * 500, -500)*(area.knockback if area.has_meta("knockback") else 1))
+		emitParticles()
+		print("Enemy hit, %s hp remains"%hp+ str(get_child_count()))
 		if (hp <= 0):
 			queue_free()
-	pass # Replace with function body.
+	
+	
+func emitParticles():
+	var emitter = GPUParticles2D.new()
+	# emitter.texture = PlaceholderTexture2D.new()
+	emitter.lifetime = 1.0
+	emitter.one_shot = true
+	emitter.amount = 30
+	emitter.emitting = true
+	emitter.global_position = global_position
+	emitter.explosiveness = 1.0
+	emitter.process_material = load("res://assets/textures/dedparticleeffect.tres")
+	add_child(emitter)
+	var emitterKillTimer = Timer.new()
+	emitterKillTimer.one_shot = true
+	emitterKillTimer.wait_time = 1.0
+	add_child(emitterKillTimer)
+	emitterKillTimer.start()
+	emitterKillTimer.timeout.connect(func() -> void:
+		emitter.queue_free()
+		emitterKillTimer.queue_free()
+		)
+	# emitter.restart()

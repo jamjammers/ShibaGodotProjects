@@ -19,7 +19,6 @@ func kill() -> void:
 	queue_free()
 
 func _on_body_entered(body: Node) -> void:
-	print(body.name)
 	if body.name == "Player":
 		body.hit(body.global_position.x > global_position.x)
 		kill()

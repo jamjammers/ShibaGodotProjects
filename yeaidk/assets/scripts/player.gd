@@ -141,7 +141,6 @@ func itemPickup():
 	if !Input.is_action_just_pressed("itemPickup"):
 		return
 
-	print("Picking up items")
 	for area in itemsTouching:
 		area.queue_free()
 		if area.type == Item.ItemType.ABILITY:
@@ -163,7 +162,6 @@ func wallJump():
 		return
 	if !abilities.wall_attach:
 		return
-	print(abilities)
 	linear_velocity.y = -1000
 	var mult = 1 if wallTouchDir == Global.Dir.LEFT else -1
 	linear_velocity.x = 700 * mult
