@@ -6,6 +6,7 @@ func _ready() -> void:
 	$killSwitch.wait_time = lifetime
 
 func launch(direction: Vector2) -> void:
+	
 	linear_velocity = direction.normalized() * speed
 	rotation = direction.angle()
 	$killSwitch.start()

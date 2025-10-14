@@ -1,5 +1,8 @@
 extends BaseEnemy
 
+func _ready() -> void:
+	super._ready();
+	hp = 5
 
 func attack():
 	physics_material_override.friction = 0

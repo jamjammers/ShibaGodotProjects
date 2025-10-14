@@ -22,6 +22,15 @@ func activate(dir)-> bool:
 	if $cooldown.is_stopped() == false or state != "off":
 		return false
 	scale.x = 1 if dir.x > 0 else -1
+	print(dir)
+	if abs(dir.x) < abs(dir.y):
+		if scale.x * dir.y > 0:
+			rotation_degrees = 90
+		else:
+			rotation_degrees = -90
+	else:
+		rotation_degrees = 0
+
 	state = "slashing"
 	show()
 	$col.disabled = false
