@@ -141,6 +141,7 @@ func itemPickup():
 	if !Input.is_action_just_pressed("itemPickup"):
 		return
 
+	print("Picking up items")
 	for area in itemsTouching:
 		area.queue_free()
 		if area.type == Item.ItemType.ABILITY:
@@ -150,7 +151,7 @@ func jump():
 	if (!Input.is_action_just_pressed("jump")):
 		return
 	if (groundContacts.size() > 0):
-		apply_central_impulse(Vector2(0, -1000))
+		linear_velocity.y = ( -1000.0)
 		jumping = -500
 	elif (!doubleJumped and abilities.double_jump):
 		linear_velocity.y = -100
@@ -162,6 +163,7 @@ func wallJump():
 		return
 	if !abilities.wall_attach:
 		return
+	print(abilities)
 	linear_velocity.y = -1000
 	var mult = 1 if wallTouchDir == Global.Dir.LEFT else -1
 	linear_velocity.x = 700 * mult
@@ -305,8 +307,6 @@ func _on_trigger_col_area_entered(area: Area2D) -> void:
 	if area.is_in_group("item"):
 		itemsTouching.append(area)
 		# inventory add item here
-		if area.type == Item.ItemType.ABILITY:
-			abilities[area.ability] = true
 	
 	if area.name == "enemyArrow":
 		hit(area.global_position.x > global_position.x)

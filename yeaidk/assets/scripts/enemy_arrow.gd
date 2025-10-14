@@ -5,6 +5,10 @@ class_name EnemyArrow extends RigidBody2D
 func _ready() -> void:
 	$killSwitch.wait_time = lifetime
 
+@warning_ignore("unused_parameter")
+func _process(delta: float) -> void:
+	rotation = linear_velocity.angle()
+
 func launch(direction: Vector2) -> void:
 	
 	linear_velocity = direction.normalized() * speed
