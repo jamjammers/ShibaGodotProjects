@@ -304,14 +304,24 @@ func _on_body_shape_exited(body_rid: RID, body: Node, body_shape_index: int, loc
 func _on_trigger_col_area_entered(area: Area2D) -> void:
 	if area.is_in_group("item"):
 		itemsTouching.append(area)
+		area.touched = true
 		# inventory add item here
 	
-	if area.name == "enemyArrow":
-		hit(area.global_position.x > global_position.x)
-
+	elif area.get_parent() is EnemyBase:
+		var enemy = area.get_parent() as EnemyBase
+		if enemy.hp <= 0:
+			print("Warning: Enemy already dead but still touching player")
+			return
+		if enemy.contactDamage:
+			hit(global_position.x > enemy.global_position.x)
+	elif area.collision_layer & 8 != 0:
+		#probably ust projectiles i think
+		hit(global_position.x > area.global_position.x)
+		area.get_parent().queue_free()
 	pass # Replace with function body.
 
 func _on_trigger_col_area_exited(area: Area2D) -> void:
 	if area.is_in_group("item"):
 		itemsTouching.erase(area)
+		area.touched = false
 	pass # Replace with function body.

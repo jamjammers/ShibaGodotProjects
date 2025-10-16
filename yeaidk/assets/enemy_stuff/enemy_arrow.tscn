@@ -10,12 +10,13 @@ size = Vector2(30, 4)
 
 [node name="enemyArrow" type="RigidBody2D"]
 collision_layer = 8
-collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_uomln")
+can_sleep = false
 lock_rotation = true
 continuous_cd = 1
 contact_monitor = true
 max_contacts_reported = 2
+linear_damp_mode = 1
 script = ExtResource("1_o13ax")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -33,7 +34,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="physCol" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_0mvnp")
 
 [node name="killSwitch" type="Timer" parent="."]
@@ -47,4 +48,12 @@ offset_right = 27.5
 offset_bottom = 2.499999
 rotation = 0.7853982
 
+[node name="hitCheck" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="triggerCol" type="CollisionShape2D" parent="hitCheck"]
+shape = SubResource("RectangleShape2D_0mvnp")
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="killSwitch" to="." method="kill"]

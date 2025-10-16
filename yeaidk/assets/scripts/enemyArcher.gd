@@ -1,4 +1,4 @@
-extends BaseEnemy
+extends EnemyBase
 
 var gravity
 

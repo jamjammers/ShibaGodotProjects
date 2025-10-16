@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://tfk6vtyxqs40" path="res://assets/scripts/item.gd" id="1_tnite"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vpy52"]
-size = Vector2(40, 40)
+size = Vector2(80, 120)
 
 [node name="item" type="Area2D" groups=["item"]]
 collision_layer = 64
@@ -27,5 +27,4 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["item"]]
-scale = Vector2(2, 3)
 shape = SubResource("RectangleShape2D_vpy52")

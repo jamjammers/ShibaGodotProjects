@@ -1,4 +1,4 @@
-class_name BaseEnemy
+class_name EnemyBase
 
 extends RigidBody2D
 
@@ -129,10 +129,10 @@ func _on_detection_body_exited(body: Node2D) -> void:
 @warning_ignore("unused_parameter")
 func _on_contact_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	var shape_owner: Node2D = body.shape_owner_get_owner(body.shape_find_owner(body_shape_index))
-	if (body.name == "Player" and contactDamage):
-		body.hit(body.global_position > global_position)
+	# if (body.name == "Player" and contactDamage):
+	# 	body.hit(body.global_position > global_position)
 	
-	elif(shape_owner.is_in_group("groundTop") and shape_owner.position.y < position.y):
+	if(shape_owner.is_in_group("groundTop") and shape_owner.position.y < position.y):
 		linear_velocity = Vector2.ZERO
 		pass
 	pass # Replace with function body.

@@ -12,8 +12,7 @@ position = Vector2(60, 6)
 scale = Vector2(0.5, 0.2)
 sprite_frames = ExtResource("1_vkclc")
 animation = &"slash"
-frame = 14
-frame_progress = 1.0
+frame_progress = 0.46669304
 
 [node name="slashTimer" type="Timer" parent="."]
 wait_time = 0.326
@@ -23,6 +22,6 @@ one_shot = true
 one_shot = true
 
 [node name="col" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(44, 61, 109, 46, 140, 31, 150, 5, 136, -24, 93, -35, 43, -42, -1, -44, -10, -1, -16, 61)
+polygon = PackedVector2Array(48, 65, 100, 53, 143, 35, 155, 3, 136, -24, 108, -33, 59, -44, 0, -47, -10, -1, -23, 64)
 
 [connection signal="timeout" from="slashTimer" to="." method="_timer_end"]

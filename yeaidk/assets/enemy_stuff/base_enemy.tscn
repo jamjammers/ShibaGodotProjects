@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bndil7bonrxn7"]
 
-[ext_resource type="Script" uid="uid://cb4jucftgxbe2" path="res://assets/scripts/base_enemy.gd" id="1_sgmmb"]
+[ext_resource type="Script" uid="uid://dtftqvsseh1ah" path="res://assets/scripts/enemy_base.gd" id="1_sgmmb"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_sgmmb"]
 friction = 0.0
@@ -48,12 +48,3 @@ collision_mask = 35
 
 [node name="ContactCol" type="CollisionShape2D" parent="contact" groups=["enemies"]]
 shape = SubResource("RectangleShape2D_isqm2")
-
-[node name="hitParticles" type="GPUParticles2D" parent="."]
-visible = false
-amount = 30
-sub_emitter = NodePath(".")
-texture = SubResource("PlaceholderTexture2D_sgmmb")
-explosiveness = 1.0
-trail_lifetime = 0.2
-process_material = ExtResource("2_isqm2")
