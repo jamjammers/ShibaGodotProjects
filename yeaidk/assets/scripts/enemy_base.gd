@@ -18,7 +18,9 @@ var stored_velocity: Vector2 = Vector2.ZERO
 
 var test = false
 
+var space_state: PhysicsDirectSpaceState2D
 
+var butt: Node2D
 func _ready() -> void:
 	# print("Debug: %s enemy is ready"%name)
 	$detectionArea.connect("body_entered", Callable(self, "_on_detection_body_entered"))
@@ -26,7 +28,8 @@ func _ready() -> void:
 	$contact.connect("body_shape_entered", Callable(self, "_on_contact_body_shape_entered"))
 	$contact.connect("area_entered", Callable(self, "_on_contact_area_entered"))
 	physics_material_override.friction = 1.0
-	
+	space_state = get_world_2d().direct_space_state
+
 func _process(delta):
 	if Input.is_action_just_pressed("test"):
 		test = !test
@@ -57,6 +60,9 @@ func _draw():
 		draw_line(-offset, target.global_position - global_position, Color.GREEN if raycast(-offset) else Color.RED, 2)
 		draw_line(Vector2(offset.x, -offset.y), target.global_position - global_position, Color.GREEN if raycast(Vector2(offset.x, -offset.y)) else Color.RED, 2)
 		draw_line(Vector2(-offset.x, -offset.y), target.global_position - global_position, Color.GREEN if raycast(Vector2(-offset.x, -offset.y)) else Color.RED, 2)
+	if butt:
+		draw_line(Vector2.ZERO, butt.global_position - global_position, Color.BLUE, 2)
+
 
 func attackProcess():
 	active = false
@@ -80,7 +86,6 @@ func attackProcess():
 	timer = maxTimer
 
 func raycast(offset: Vector2) -> bool:
-	var space_state = get_world_2d().direct_space_state
 	var query = PhysicsRayQueryParameters2D.create(global_position+offset, target.global_position)
 	
 	var layers = 1+2+pow(2,5)
@@ -148,6 +153,15 @@ func _on_contact_area_entered(area: Area2D) -> void:
 				raycast(Vector2(-colSize.x/2+1, -colSize.y/2+1))
 			):
 				return
+			
+			var query = PhysicsRayQueryParameters2D.create(global_position, area.get_node("front").global_position)
+			query.collision_mask = 2
+			var result = space_state.intersect_ray(query)
+			print("Raycast result: "+str(result))
+			butt = area.get_node("front") as Node2D
+			if result:
+				return
+			
 		var yDir = 1;
 		if area.name == "clawSlash" and area.direction == Global.Dir.UP:
 			yDir = -1

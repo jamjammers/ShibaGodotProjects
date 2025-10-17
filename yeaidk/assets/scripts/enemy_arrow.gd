@@ -15,14 +15,11 @@ func launch(direction: Vector2) -> void:
 	linear_velocity = direction.normalized() * speed
 	rotation = direction.angle()
 	$killSwitch.start()
-	print("pre: "+str(linear_velocity))
 
 func kill() -> void:
 	queue_free()
-	print("post"+str(linear_velocity))
 
 func _on_body_entered(body: Node) -> void:
-	print(body.name)
 	if body.name == "Player":
 		body.hit(body.global_position.x > global_position.x)
 		kill()
